@@ -41,7 +41,7 @@ export function Contact({ t }: { t: Translation }) {
         </motion.div>
       </div>
       <footer className="mx-auto max-w-7xl py-10 text-sm text-studio-muted">
-        <p>© 2026 Thiago Filipe · AI Engineering Studio</p>
+        <p>© 2026 Thiago Filipe</p>
       </footer>
     </MotionSection>
   )

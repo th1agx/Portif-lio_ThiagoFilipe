@@ -30,7 +30,7 @@ export const translations: Record<'pt' | 'en', Translation> = {
       technologies: 'Tecnologias',
     },
     hero: {
-      eyebrow: 'AI Engineering Studio',
+      eyebrow: 'Software, IA e Automação',
       title: 'Engenheiro de Software Júnior focado em IA aplicada ao desenvolvimento.',
       subtitle:
         'Construo software, automações e integrações com Python, JavaScript, PHP, Laravel, LLMs, agentes de IA e Prompt Engineering.',
@@ -150,7 +150,7 @@ export const translations: Record<'pt' | 'en', Translation> = {
       technologies: 'Technologies',
     },
     hero: {
-      eyebrow: 'AI Engineering Studio',
+      eyebrow: 'Software, AI and Automation',
       title: 'Junior Software Engineer focused on AI applied to development.',
       subtitle:
         'I build software, automations and integrations with Python, JavaScript, PHP, Laravel, LLMs, AI agents and Prompt Engineering.',
