@@ -20,36 +20,34 @@ export function SectionHeader({ eyebrow, title, description }: SectionHeaderProp
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: containerRef.current,
-        start: 'top 85%',
-        toggleActions: 'play none none reverse',
+        start: 'top 95%',
+        end: 'top 40%',
+        scrub: 1, // Continuous scrub
       }
     })
 
     if (eyebrow) {
       tl.from('.header-eyebrow', {
-        y: 20,
+        y: 40,
         opacity: 0,
-        duration: 0.8,
-        ease: 'power3.out'
+        ease: 'none'
       })
     }
 
     tl.from('.header-title-word', {
-      y: 40,
+      y: 60,
       opacity: 0,
-      filter: 'blur(8px)',
-      duration: 1,
-      stagger: 0.05,
-      ease: 'power4.out'
-    }, eyebrow ? '-=0.6' : 0)
+      filter: 'blur(12px)',
+      stagger: 0.1,
+      ease: 'none'
+    }, 0)
 
     if (description) {
       tl.from('.header-desc', {
-        y: 20,
+        y: 40,
         opacity: 0,
-        duration: 1,
-        ease: 'power3.out'
-      }, '-=0.6')
+        ease: 'none'
+      }, 0.2) // slightly delayed relative to the timeline start
     }
 
   }, { scope: containerRef })

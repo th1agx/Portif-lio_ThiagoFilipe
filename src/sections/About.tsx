@@ -15,47 +15,48 @@ export function About({ t }: { t: Translation }) {
   useGSAP(() => {
     if (!containerRef.current) return
 
-    // Animate the image block
+    // Scrubbed entrance for the image (continuous reveal)
     gsap.from(imageRef.current, {
-      y: 80,
+      y: 120,
       opacity: 0,
-      rotationX: 10,
-      filter: 'blur(15px)',
-      duration: 1.5,
-      ease: 'power4.out',
+      rotationX: 15,
+      scale: 0.9,
+      filter: 'blur(20px)',
+      ease: 'none',
       scrollTrigger: {
         trigger: containerRef.current,
-        start: 'top 85%',
-        toggleActions: 'play none none reverse',
+        start: 'top 95%',
+        end: 'top 40%',
+        scrub: 1.5,
       }
     })
 
-    // Slight parallax effect on the image itself
+    // Slight parallax effect on the image itself that continues even after entrance
     gsap.to(imageRef.current, {
-      y: -30,
+      yPercent: -15,
       ease: 'none',
       scrollTrigger: {
         trigger: containerRef.current,
         start: 'top bottom',
         end: 'bottom top',
-        scrub: 1, // Smooth scrub
+        scrub: 1, 
       }
     })
 
-    // Stagger text paragraphs
+    // Scrubbed text paragraphs
     const paragraphs = textRef.current?.querySelectorAll('p')
     if (paragraphs) {
       gsap.from(paragraphs, {
-        y: 40,
+        y: 60,
         opacity: 0,
-        filter: 'blur(10px)',
-        duration: 1.2,
-        stagger: 0.15,
-        ease: 'power3.out',
+        filter: 'blur(12px)',
+        stagger: 0.2, // Stagger works with scrub by spreading the animation duration
+        ease: 'none',
         scrollTrigger: {
-          trigger: textRef.current,
-          start: 'top 85%',
-          toggleActions: 'play none none reverse',
+          trigger: containerRef.current,
+          start: 'top 80%',
+          end: 'top 20%',
+          scrub: 1.2,
         }
       })
     }
@@ -65,7 +66,7 @@ export function About({ t }: { t: Translation }) {
   return (
     <section id="sobre" className="px-4 py-24 sm:px-6 lg:px-8" ref={containerRef}>
       <div className="mx-auto max-w-7xl">
-        <div className="grid gap-12 lg:grid-cols-[2fr_3fr] items-start" style={{ perspective: '1000px' }}>
+        <div className="grid gap-12 lg:grid-cols-[2fr_3fr] items-start" style={{ perspective: '1200px' }}>
           
           <div className="w-full will-change-transform" ref={imageRef}>
             <div className="aspect-[3/4] w-full overflow-hidden rounded-2xl bg-vanilla-bg shadow-subtle border border-vanilla-border/50 transition-transform duration-700 hover:scale-[1.02] hover:rotate-1">
@@ -79,11 +80,6 @@ export function About({ t }: { t: Translation }) {
           </div>
 
           <div className="h-full flex flex-col justify-center" ref={textRef}>
-            <div className="opacity-0 translate-y-8" style={{ animation: 'none' }} /* Section header will be animated if we wrap it, but it has its own logic. Let's just animate the wrapper */>
-               {/* Note: to animate SectionHeader seamlessly, we should probably refactor it or just animate its container */}
-            </div>
-            
-            {/* We will just animate the paragraphs as requested */}
             <div className="mb-8">
               <SectionHeader eyebrow={t.about.eyebrow} title={t.about.title} />
             </div>

@@ -17,16 +17,17 @@ export function Experience({ t }: { t: Translation }) {
     const items = listRef.current.children
     
     gsap.from(items, {
-      y: 40,
+      y: 80,
       opacity: 0,
-      filter: 'blur(8px)',
-      duration: 1.2,
-      stagger: 0.15,
-      ease: 'power3.out',
+      scale: 0.95,
+      filter: 'blur(10px)',
+      stagger: 0.2,
+      ease: 'none',
       scrollTrigger: {
         trigger: listRef.current,
-        start: 'top 85%',
-        toggleActions: 'play none none reverse',
+        start: 'top 90%',
+        end: 'top 20%',
+        scrub: 1.2,
       }
     })
   }, { scope: containerRef })

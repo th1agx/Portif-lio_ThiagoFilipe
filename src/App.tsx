@@ -1,4 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
+import Lenis from 'lenis'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 import { Hero } from './sections/Hero'
 import { About } from './sections/About'
@@ -10,8 +13,11 @@ import { Contact } from './sections/Contact'
 import { Navbar } from './components/Navbar'
 import { CursorTrail } from './components/CursorTrail'
 import { ProjectDrawer } from './components/ProjectDrawer'
+import { LoadingScreen } from './components/LoadingScreen'
 import { translations } from './data/i18n'
 import type { Locale, Project } from './data/types'
+
+gsap.registerPlugin(ScrollTrigger)
 
 function getInitialLocale(): Locale {
   if (typeof window === 'undefined') {
@@ -24,6 +30,7 @@ function getInitialLocale(): Locale {
 function App() {
   const [locale, setLocale] = useState<Locale>(getInitialLocale)
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
   
   const t = useMemo(() => translations[locale], [locale])
 
@@ -36,15 +43,46 @@ function App() {
     metaDescription?.setAttribute('content', t.meta.description)
   }, [locale, t])
 
+  // Initialize Lenis for Smooth Scrolling
+  useEffect(() => {
+    if (isLoading) return // Do not scroll while loading
+
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: 'vertical',
+      gestureOrientation: 'vertical',
+      smoothWheel: true,
+      wheelMultiplier: 1,
+      touchMultiplier: 2,
+    })
+
+    // Integrate Lenis with GSAP ScrollTrigger
+    lenis.on('scroll', ScrollTrigger.update)
+
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000)
+    })
+    
+    gsap.ticker.lagSmoothing(0)
+
+    return () => {
+      lenis.destroy()
+      gsap.ticker.remove(lenis.raf)
+    }
+  }, [isLoading])
+
   return (
-    <div className="relative min-h-screen selection:bg-vanilla-text selection:text-vanilla-bg bg-vanilla-bg">
+    <div className="relative min-h-screen selection:bg-vanilla-text selection:text-vanilla-bg bg-vanilla-bg" style={{ perspective: '1500px' }}>
+      {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
+      
       <CursorTrail />
       
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <Navbar locale={locale} t={t} onLocaleChange={setLocale} />
+        {!isLoading && <Navbar locale={locale} t={t} onLocaleChange={setLocale} />}
         
         <main className="flex flex-col gap-0">
-          <Hero t={t} />
+          <Hero t={t} isLoaded={!isLoading} />
           <About t={t} />
           <Skills t={t} />
           <Projects locale={locale} t={t} onDetails={setSelectedProject} />

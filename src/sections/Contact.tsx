@@ -12,54 +12,58 @@ export function Contact({ t }: { t: Translation }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const leftColRef = useRef<HTMLDivElement>(null)
   const rightColRef = useRef<HTMLDivElement>(null)
-  const footerRef = useRef<HTMLDivElement>(null)
 
   useGSAP(() => {
     if (!containerRef.current) return
 
-    const tl = gsap.timeline({
+    // Scrub parallax for the dark section (feels like an unveiling)
+    gsap.from(containerRef.current, {
+      yPercent: 10,
+      ease: 'none',
       scrollTrigger: {
         trigger: containerRef.current,
-        start: 'top 80%',
-        toggleActions: 'play none none reverse',
+        start: 'top bottom',
+        end: 'top top',
+        scrub: true,
       }
     })
 
     if (leftColRef.current) {
-      tl.from(leftColRef.current.children, {
-        y: 40,
+      gsap.from(leftColRef.current.children, {
+        y: 60,
         opacity: 0,
         filter: 'blur(10px)',
-        duration: 1.2,
         stagger: 0.1,
-        ease: 'power4.out',
+        ease: 'none',
+        scrollTrigger: {
+          trigger: leftColRef.current,
+          start: 'top 95%',
+          end: 'top 50%',
+          scrub: 1,
+        }
       })
     }
 
     if (rightColRef.current) {
-      tl.from(rightColRef.current.children, {
-        y: 20,
+      gsap.from(rightColRef.current.children, {
+        y: 40,
         opacity: 0,
         filter: 'blur(5px)',
-        duration: 1,
         stagger: 0.1,
-        ease: 'power3.out',
-      }, '-=0.8')
-    }
-
-    if (footerRef.current) {
-      tl.from(footerRef.current.children, {
-        y: 10,
-        opacity: 0,
-        duration: 1,
-        ease: 'power2.out',
-      }, '-=0.6')
+        ease: 'none',
+        scrollTrigger: {
+          trigger: rightColRef.current,
+          start: 'top 95%',
+          end: 'top 50%',
+          scrub: 1,
+        }
+      })
     }
 
   }, { scope: containerRef })
 
   return (
-    <section id="contato" className="px-4 py-32 sm:px-6 lg:px-8 bg-black text-[#F4F1EA] mt-24" ref={containerRef}>
+    <section id="contato" className="px-4 py-32 sm:px-6 lg:px-8 bg-black text-[#F4F1EA] mt-24 will-change-transform" ref={containerRef}>
       <div className="mx-auto max-w-7xl flex flex-col md:flex-row gap-16 justify-between items-start">
         <div className="max-w-2xl" ref={leftColRef}>
           <p className="font-mono text-xs font-bold uppercase tracking-widest2 text-[#F4F1EA]/60 mb-6 will-change-transform">{t.contact.eyebrow}</p>
@@ -91,9 +95,9 @@ export function Contact({ t }: { t: Translation }) {
         </div>
       </div>
       
-      <div className="mx-auto max-w-7xl mt-32 border-t border-[#F4F1EA]/20 pt-8 flex justify-between items-center text-sm font-medium text-[#F4F1EA]/60" ref={footerRef}>
-        <p className="will-change-transform">© {new Date().getFullYear()} Thiago Filipe</p>
-        <p className="will-change-transform">Vanilla Premium UI</p>
+      <div className="mx-auto max-w-7xl mt-32 border-t border-[#F4F1EA]/20 pt-8 flex justify-between items-center text-sm font-medium text-[#F4F1EA]/60">
+        <p>© {new Date().getFullYear()} Thiago Filipe</p>
+        <p>Cinematic Motion UI</p>
       </div>
     </section>
   )

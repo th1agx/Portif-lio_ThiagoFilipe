@@ -26,17 +26,18 @@ export function Projects({ locale, t, onDetails }: ProjectsProps) {
     const cards = cardsRef.current.children
     
     gsap.from(cards, {
-      y: 60,
-      rotationX: 15,
+      y: 120,
+      rotationX: 20,
+      translateZ: -50,
       opacity: 0,
-      filter: 'blur(10px)',
-      duration: 1.2,
-      stagger: 0.1,
-      ease: 'power3.out',
+      filter: 'blur(15px)',
+      stagger: 0.2, // Stagger works wonderfully with scrub
+      ease: 'none',
       scrollTrigger: {
         trigger: cardsRef.current,
-        start: 'top 80%',
-        toggleActions: 'play none none reverse',
+        start: 'top 95%',
+        end: 'top 10%',
+        scrub: 1, // Smooth cinematic scrub
       }
     })
   }, { scope: containerRef })

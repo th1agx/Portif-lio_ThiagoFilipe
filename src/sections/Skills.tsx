@@ -18,16 +18,16 @@ export function Skills({ t }: { t: Translation }) {
     const items = listRef.current.children
     
     gsap.from(items, {
-      y: 40,
+      y: 60,
       opacity: 0,
-      filter: 'blur(8px)',
-      duration: 1.2,
+      filter: 'blur(10px)',
       stagger: 0.1,
-      ease: 'power3.out',
+      ease: 'none',
       scrollTrigger: {
         trigger: listRef.current,
-        start: 'top 85%',
-        toggleActions: 'play none none reverse',
+        start: 'top 90%',
+        end: 'top 30%',
+        scrub: 1, // Smooth scrub
       }
     })
   }, { scope: containerRef })
