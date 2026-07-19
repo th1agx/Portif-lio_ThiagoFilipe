@@ -57,11 +57,12 @@ function Plexus() {
 
   return (
     <Icosahedron ref={meshRef} args={[2, 16]} position={[0, 0, -2]}>
+      {/* Changed color to a dark tone to contrast with the creme background */}
       <meshBasicMaterial 
-        color="#F4F1EA" 
+        color="#000000" 
         wireframe={true} 
         transparent={true} 
-        opacity={0.06} // Extremely subtle
+        opacity={0.03} // Extremely subtle, almost like a pencil sketch
       />
     </Icosahedron>
   )
@@ -109,14 +110,15 @@ function Dust() {
           itemSize={3}
         />
       </bufferGeometry>
-      <pointsMaterial size={0.02} color="#F4F1EA" transparent opacity={0.15} sizeAttenuation />
+      <pointsMaterial size={0.02} color="#000000" transparent opacity={0.05} sizeAttenuation />
     </points>
   )
 }
 
 export function Scene() {
   return (
-    <div className="fixed inset-0 w-full h-full z-0 pointer-events-none bg-vanilla-bg mix-blend-difference">
+    // Removed bg-vanilla-bg and mix-blend-difference so it's purely a transparent canvas over the original document background
+    <div className="fixed inset-0 w-full h-full z-0 pointer-events-none">
       <Canvas 
         camera={{ position: [0, 0, 5], fov: 45 }} 
         dpr={[1, 2]} 
