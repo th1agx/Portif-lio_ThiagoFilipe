@@ -1,11 +1,11 @@
 import { ArrowDown, Code2, Contact, Mail, MapPin } from 'lucide-react'
-import { motion, useReducedMotion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { Button } from '../components/Button'
 import { links } from '../data/links'
 import type { Translation } from '../data/types'
 
 export function Hero({ t }: { t: Translation }) {
-  const reduceMotion = useReducedMotion()
+  const reduceMotion = false
   const heroContainer = {
     hidden: { opacity: 0 },
     visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.08 } },

@@ -1,6 +1,5 @@
 import { useRef } from 'react'
 import type { ReactNode } from 'react'
-import { useReducedMotion } from 'framer-motion'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
@@ -15,7 +14,7 @@ type MotionSectionProps = {
 }
 
 export function MotionSection({ id, children, className = '', variant = 'rise' }: MotionSectionProps) {
-  const reduceMotion = useReducedMotion()
+  const reduceMotion = false
   const sectionRef = useRef<HTMLElement>(null)
 
   useGSAP(() => {

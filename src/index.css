@@ -25,10 +25,10 @@ body {
   margin: 0;
   overflow-x: hidden;
   background:
-    radial-gradient(circle at 15% 50%, rgba(49, 92, 255, 0.12), transparent 35rem),
-    radial-gradient(circle at 85% 30%, rgba(122, 60, 255, 0.12), transparent 30rem),
-    radial-gradient(circle at 50% 80%, rgba(255, 77, 109, 0.08), transparent 35rem),
-    linear-gradient(180deg, #03040b 0%, #060714 40%, #03040b 100%);
+    radial-gradient(circle at 20% 40%, rgba(255, 42, 109, 0.25), transparent 45rem),
+    radial-gradient(circle at 80% 20%, rgba(113, 28, 255, 0.25), transparent 40rem),
+    radial-gradient(circle at 50% 90%, rgba(5, 213, 255, 0.2), transparent 45rem),
+    linear-gradient(180deg, #000000 0%, #0a0514 50%, #000000 100%);
   color: #f4f7fb;
 }
 
@@ -176,6 +176,7 @@ a {
   }
 }
 
+/* Animações sempre ativas (Ignorando prefers-reduced-motion temporariamente)
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -192,3 +193,4 @@ a {
     animation: none !important;
   }
 }
+*/

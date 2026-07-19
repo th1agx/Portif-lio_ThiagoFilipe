@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-import { useReducedMotion } from 'framer-motion';
 
 type Star = {
   x: number;
@@ -12,7 +11,7 @@ type Star = {
 
 export function Starfield() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = false;
 
   useEffect(() => {
     if (reduceMotion) return;
