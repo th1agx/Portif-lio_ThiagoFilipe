@@ -1,91 +1,62 @@
-import { Code2, ExternalLink, ArrowRight } from 'lucide-react'
-import { motion } from 'framer-motion'
-import type { MouseEvent } from 'react'
+import { ArrowRight } from 'lucide-react'
 import type { Locale, Project, Translation } from '../data/types'
 import { ProjectPreview } from './ProjectPreview'
+import { TechBadge } from './TechBadge'
 
 type ProjectCardProps = {
   project: Project
   locale: Locale
   t: Translation
-  compact?: boolean // kept for backwards compat but ignored in our unified grid
   onDetails: (project: Project) => void
 }
 
 export function ProjectCard({ project, locale, t, onDetails }: ProjectCardProps) {
-  function handleMouseMove(event: MouseEvent<HTMLElement>) {
-    const rect = event.currentTarget.getBoundingClientRect()
-    event.currentTarget.style.setProperty('--spotlight-x', `${event.clientX - rect.left}px`)
-    event.currentTarget.style.setProperty('--spotlight-y', `${event.clientY - rect.top}px`)
-  }
-
   return (
-    <motion.article
-      layout
-      variants={{
-        hidden: { opacity: 0, y: 26, scale: 0.98 },
-        visible: { opacity: 1, y: 0, scale: 1 },
-      }}
-      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-      onMouseMove={handleMouseMove}
-      className="project-card-overlay group flex flex-col justify-end min-h-[400px] rounded-2xl bg-galaxy-surface"
-    >
-      <div className="absolute inset-0 z-0 opacity-60 transition-opacity duration-500 group-hover:opacity-100">
-        <ProjectPreview project={project} />
+    <article className="group flex flex-col gap-6">
+      <div 
+        className="relative aspect-[16/10] overflow-hidden bg-white/50 cursor-pointer"
+        onClick={() => onDetails(project)}
+      >
+        <div className="absolute inset-0 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105">
+          <ProjectPreview project={project} />
+        </div>
+        <div className="absolute inset-0 bg-vanilla-bg/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
       </div>
       
-      <div className="relative z-10 p-6 sm:p-8 flex flex-col gap-4">
+      <div className="flex flex-col gap-4">
         <div>
-          <h3 className="font-display text-2xl font-bold tracking-tight text-galaxy-text mb-2">
-            {project.title[locale]}
-          </h3>
-          <p className="text-sm font-medium text-galaxy-subtle line-clamp-2">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-display text-2xl font-black tracking-tightest text-vanilla-text">
+              {project.title[locale]}
+            </h3>
+            <span className="text-xs font-bold uppercase tracking-widest2 text-vanilla-muted">
+              {project.status[locale]}
+            </span>
+          </div>
+          <p className="text-lg leading-relaxed text-vanilla-muted line-clamp-3">
             {project.description[locale]}
           </p>
         </div>
 
-        <div className="flex flex-wrap gap-x-2 gap-y-1 text-xs font-mono text-galaxy-muted">
-          {project.technologies.slice(0, 4).map((tech, i) => (
-            <span key={tech}>
-              {tech}
-              {i < Math.min(project.technologies.length, 4) - 1 && <span className="ml-2 text-white/20">·</span>}
-            </span>
+        <div className="flex flex-wrap gap-2 pt-2">
+          {project.technologies.slice(0, 4).map((tech) => (
+            <TechBadge key={tech} label={tech} />
           ))}
-          {project.technologies.length > 4 && <span>+{project.technologies.length - 4}</span>}
+          {project.technologies.length > 4 && (
+            <span className="text-xs font-mono text-vanilla-muted flex items-center ml-2">
+              +{project.technologies.length - 4}
+            </span>
+          )}
         </div>
 
-        <div className="mt-4 flex flex-wrap gap-4 border-t border-white/5 pt-6">
-          <button
-            type="button"
-            onClick={() => onDetails(project)}
-            className="flex items-center gap-2 text-sm font-medium text-galaxy-text transition-colors hover:text-galaxy-cyan"
-          >
-            {t.common.details} <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
-          </button>
-          
-          <div className="flex-1" />
-          
-          <a
-            href={project.repoUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="flex items-center gap-2 text-sm font-medium text-galaxy-muted hover:text-galaxy-text transition-colors"
-          >
-            <Code2 size={16} /> <span className="hidden sm:inline">Code</span>
-          </a>
-          
-          {project.demoUrl ? (
-            <a
-              href={project.demoUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="flex items-center gap-2 text-sm font-medium text-galaxy-cyan hover:text-galaxy-cyan/80 transition-colors"
-            >
-              <ExternalLink size={16} /> <span className="hidden sm:inline">Demo</span>
-            </a>
-          ) : null}
-        </div>
+        <button
+          type="button"
+          onClick={() => onDetails(project)}
+          className="mt-2 flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-vanilla-text transition-colors hover:text-vanilla-muted w-max"
+        >
+          {t.common.details} <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+        </button>
       </div>
-    </motion.article>
+    </article>
   )
 }

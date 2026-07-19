@@ -3,319 +3,80 @@
 @tailwind utilities;
 
 /* ──────────────────────────────────────────
-   ROOT — Deep Space Base
+   ROOT — Swiss Editorial Vanilla
    ────────────────────────────────────────── */
+
 :root {
-  color: #e4e4ec;
-  background: #030303;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
+  color-scheme: light;
+}
+
+body {
+  background-color: #F5F4EE;
+  color: #111111;
+  font-family: 'Satoshi', sans-serif;
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-* {
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  min-width: 320px;
-  min-height: 100vh;
-  margin: 0;
-  overflow-x: hidden;
-  background: #030303;
-  color: #e4e4ec;
-}
-
-body::before,
-body::after {
-  display: none;
-}
-
-/* ──────────────────────────────────────────
-   TYPOGRAPHY RESETS
-   ────────────────────────────────────────── */
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Space Grotesk', system-ui, sans-serif;
-  font-weight: 600;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-}
-
-p, li, span {
-  font-family: 'Inter', system-ui, sans-serif;
-}
-
-section[id] {
-  scroll-margin-top: 80px;
-}
-
-button,
-a {
-  -webkit-tap-highlight-color: transparent;
-}
-
-:focus-visible {
-  outline: 1px solid rgba(77, 196, 232, 0.6);
-  outline-offset: 3px;
-}
-
 ::selection {
-  color: #e4e4ec;
-  background: rgba(77, 196, 232, 0.25);
+  background-color: #111111;
+  color: #F5F4EE;
 }
 
 /* ──────────────────────────────────────────
-   NAVBAR — Glass Pill
+   TYPOGRAPHY
    ────────────────────────────────────────── */
-.nav-pill {
-  background: rgba(6, 6, 9, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-}
 
-/* ──────────────────────────────────────────
-   CARDS — Cinematic, Minimal Borders
-   ────────────────────────────────────────── */
-.galaxy-card {
-  background: rgba(15, 15, 24, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(8px);
-  position: relative;
-  overflow: hidden;
-  transition: border-color 350ms ease, transform 350ms ease;
-}
-
-.galaxy-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  background: radial-gradient(
-    400px circle at var(--mx, 50%) var(--my, 0%),
-    rgba(77, 196, 232, 0.04),
-    transparent 70%
-  );
-  transition: opacity 400ms ease;
-  pointer-events: none;
-}
-
-.galaxy-card:hover::before {
-  opacity: 1;
-}
-
-.galaxy-card:hover {
-  border-color: rgba(255, 255, 255, 0.1);
-}
-
-/* Project card — image overlay variant */
-.project-card-overlay {
-  position: relative;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  transition: transform 400ms cubic-bezier(0.23, 1, 0.32, 1),
-              border-color 400ms ease;
-}
-
-.project-card-overlay:hover {
-  transform: translateY(-6px);
-  border-color: rgba(77, 196, 232, 0.2);
-}
-
-.project-card-overlay::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to bottom,
-    transparent 20%,
-    rgba(3, 3, 3, 0.75) 60%,
-    rgba(3, 3, 3, 0.95) 100%
-  );
-  pointer-events: none;
-}
-
-/* ──────────────────────────────────────────
-   TECH BADGES — Minimal text
-   ────────────────────────────────────────── */
-.tech-badge {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.68rem;
-  color: rgba(144, 144, 168, 0.8);
-  letter-spacing: 0.04em;
-  transition: color 200ms ease;
-}
-
-.tech-badge:hover {
-  color: rgba(77, 196, 232, 0.9);
-}
-
-/* ──────────────────────────────────────────
-   BUTTONS — Premium variants
-   ────────────────────────────────────────── */
-.btn-primary {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  border-radius: 6px;
-  background: linear-gradient(135deg, rgba(77, 196, 232, 0.15), rgba(139, 101, 200, 0.15));
-  border: 1px solid rgba(77, 196, 232, 0.2);
-  color: #e4e4ec;
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 0.875rem;
-  font-weight: 500;
-  letter-spacing: 0.01em;
-  transition: all 250ms ease;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.btn-primary:hover {
-  background: linear-gradient(135deg, rgba(77, 196, 232, 0.25), rgba(139, 101, 200, 0.25));
-  border-color: rgba(77, 196, 232, 0.4);
-  transform: translateY(-1px);
-}
-
-.btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  color: rgba(228, 228, 236, 0.7);
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 0.875rem;
-  font-weight: 500;
-  transition: all 250ms ease;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.12);
-  color: #e4e4ec;
-}
-
-.btn-ghost {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.25rem;
-  color: rgba(144, 144, 168, 0.7);
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 0.875rem;
-  font-weight: 500;
-  transition: color 200ms ease;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.btn-ghost:hover {
-  color: #e4e4ec;
-}
-
-/* ──────────────────────────────────────────
-   SECTION HEADER — Editorial
-   ────────────────────────────────────────── */
 .section-eyebrow {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.7rem;
-  font-weight: 500;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: rgba(77, 196, 232, 0.7);
-  margin-bottom: 1rem;
+  @apply font-mono text-xs font-bold uppercase tracking-widest2 text-vanilla-muted mb-4 block;
 }
 
 .section-title {
-  font-family: 'Space Grotesk', system-ui, sans-serif;
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  color: #e4e4ec;
-  line-height: 1.05;
+  @apply font-display font-black tracking-tightest leading-[0.95];
 }
 
 /* ──────────────────────────────────────────
-   ANIMATED GRADIENT TEXT
+   COMPONENTS
    ────────────────────────────────────────── */
-.animated-gradient-text {
-  background-size: 300% 300%;
-  animation: gradient-shift 8s ease-in-out infinite;
+
+.btn-primary {
+  @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-none bg-vanilla-text px-6 py-2 text-sm font-bold text-vanilla-bg transition duration-300 hover:bg-black active:scale-95;
 }
 
-@keyframes gradient-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+.btn-secondary {
+  @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-none border border-vanilla-border bg-transparent px-6 py-2 text-sm font-bold text-vanilla-text transition duration-300 hover:bg-vanilla-border active:scale-95;
 }
 
-/* ──────────────────────────────────────────
-   TIMELINE — Experience
-   ────────────────────────────────────────── */
-.timeline-line {
-  background: linear-gradient(
-    to bottom,
-    transparent,
-    rgba(77, 196, 232, 0.3) 20%,
-    rgba(139, 101, 200, 0.3) 60%,
-    transparent
-  );
+.btn-ghost {
+  @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-none bg-transparent px-6 py-2 text-sm font-bold text-vanilla-muted transition duration-300 hover:text-vanilla-text active:scale-95;
+}
+
+.tech-badge {
+  @apply inline-flex items-center gap-1.5 border border-vanilla-border px-2 py-1 font-mono text-[0.65rem] font-bold uppercase tracking-wider text-vanilla-text bg-white/40;
 }
 
 /* ──────────────────────────────────────────
-   SCROLL ANIMATIONS (GSAP targets)
+   UTILITIES
    ────────────────────────────────────────── */
+
+/* Remove any glowing or colorful effects from before */
 .gsap-reveal {
-  will-change: transform, opacity;
+  opacity: 0;
+  visibility: hidden;
 }
 
 /* ──────────────────────────────────────────
-   STAR SPARKLE
+   CURSOR PAINT (Black trail effect)
    ────────────────────────────────────────── */
-@keyframes sparkle {
-  0%, 100% { opacity: 0.15; transform: scale(0.8); }
-  50% { opacity: 1; transform: scale(1.2); }
-}
 
-/* ──────────────────────────────────────────
-   SCANLINE effect (photo card)
-   ────────────────────────────────────────── */
-.scanline {
-  position: relative;
-  overflow: hidden;
-}
-
-.scanline::after {
-  position: absolute;
-  inset: 0;
-  content: '';
-  background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.03), transparent);
-  transform: translateY(-120%);
-  animation: scanline 5s ease-in-out infinite;
-}
-
-@keyframes scanline {
-  0%, 35% { transform: translateY(-120%); }
-  70%, 100% { transform: translateY(120%); }
-}
-
-/* ──────────────────────────────────────────
-   GSAP AURORA KEYFRAME
-   ────────────────────────────────────────── */
-@keyframes studio-aurora {
-  0% { transform: translate3d(-3%, -2%, 0) rotate(0deg) scale(1); }
-  100% { transform: translate3d(3%, 2%, 0) rotate(4deg) scale(1.04); }
+#cursor-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 50; /* Above most things, but below critical interactive elements if needed */
+  mix-blend-mode: multiply; /* Looks like ink on paper */
 }

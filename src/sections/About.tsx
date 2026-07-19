@@ -1,39 +1,38 @@
 import { SectionHeader } from '../components/SectionHeader'
-import { MotionSection } from '../components/MotionSection'
 import type { Translation } from '../data/types'
 import { motion } from 'framer-motion'
 
 export function About({ t }: { t: Translation }) {
   return (
-    <MotionSection id="sobre" className="px-4 py-24 sm:px-6 lg:px-8" variant="slide">
-      <div className="mx-auto max-w-6xl">
-        <div className="grid gap-12 lg:grid-cols-[1fr_1.5fr] items-center">
+    <section id="sobre" className="px-4 py-24 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <div className="grid gap-12 lg:grid-cols-[2fr_3fr] items-start">
           
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
             viewport={{ once: false, amount: 0.3 }}
             transition={{ duration: 0.8 }}
-            className="relative mx-auto w-full max-w-sm lg:max-w-none"
+            className="w-full"
           >
-            <div className="scanline absolute inset-0 z-20 pointer-events-none rounded-2xl" />
-            <div className="relative overflow-hidden rounded-2xl border border-white/5 bg-galaxy-surface/50 p-2 shadow-card backdrop-blur-md">
+            {/* Imagem em P&B com contorno rígido - Estilo Editorial */}
+            <div className="aspect-[3/4] w-full overflow-hidden border border-vanilla-border bg-vanilla-bg p-2">
               <img
                 src="./profile/thiago-filipe.jpeg"
                 alt={t.hero.photoAlt}
-                className="aspect-[4/5] w-full rounded-xl object-cover object-[50%_18%] filter grayscale-[30%] contrast-[1.1] transition-all duration-700 hover:grayscale-0 hover:contrast-100"
+                className="h-full w-full object-cover object-[50%_18%] grayscale contrast-125"
                 loading="lazy"
               />
             </div>
-            {/* Decorative element */}
-            <div className="absolute -left-4 -top-4 h-24 w-24 rounded-full bg-galaxy-cyan/20 blur-2xl" />
-            <div className="absolute -bottom-4 -right-4 h-32 w-32 rounded-full bg-galaxy-purple/20 blur-2xl" />
+            <p className="mt-4 font-mono text-xs font-bold uppercase tracking-widest2 text-vanilla-muted">
+              FIG 1. — {t.hero.photoAlt}
+            </p>
           </motion.div>
 
-          <div>
+          <div className="lg:pl-12 lg:border-l lg:border-vanilla-border h-full">
             <SectionHeader eyebrow={t.about.eyebrow} title={t.about.title} />
             <motion.div
-              className="flex flex-col gap-6"
+              className="flex flex-col gap-8"
               initial="hidden"
               whileInView="visible"
               viewport={{ once: false, amount: 0.1 }}
@@ -43,7 +42,7 @@ export function About({ t }: { t: Translation }) {
                 <motion.p
                   key={paragraph}
                   variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } } }}
-                  className={`text-lg leading-relaxed ${i === 0 ? 'text-galaxy-text font-medium text-xl' : 'text-galaxy-muted'}`}
+                  className={`text-lg leading-relaxed ${i === 0 ? 'text-2xl font-medium text-vanilla-text leading-snug' : 'text-vanilla-muted'}`}
                 >
                   {paragraph}
                 </motion.p>
@@ -53,6 +52,6 @@ export function About({ t }: { t: Translation }) {
 
         </div>
       </div>
-    </MotionSection>
+    </section>
   )
 }

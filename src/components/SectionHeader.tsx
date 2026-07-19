@@ -6,10 +6,16 @@ type SectionHeaderProps = {
 
 export function SectionHeader({ eyebrow, title, description }: SectionHeaderProps) {
   return (
-    <div className="mb-12 max-w-3xl">
+    <div className="mb-16">
       <p className="section-eyebrow">{eyebrow}</p>
-      <h2 className="section-title text-3xl sm:text-4xl lg:text-5xl">{title}</h2>
-      {description ? <p className="mt-6 text-lg leading-relaxed text-galaxy-muted">{description}</p> : null}
+      <h2 className="section-title text-4xl sm:text-6xl md:text-8xl tracking-tightest mb-6">
+        {title}
+      </h2>
+      {description ? (
+        <p className="max-w-2xl text-xl leading-relaxed text-vanilla-muted">
+          {description}
+        </p>
+      ) : null}
     </div>
   )
 }

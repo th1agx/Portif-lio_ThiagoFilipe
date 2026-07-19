@@ -1,8 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import type { Locale, Project } from './data/types'
-import { translations } from './data/i18n'
-import { Starfield } from './components/Starfield'
-import { Navbar } from './components/Navbar'
+
 import { Hero } from './sections/Hero'
 import { About } from './sections/About'
 import { Skills } from './sections/Skills'
@@ -10,13 +7,16 @@ import { Projects } from './sections/Projects'
 import { Experience } from './sections/Experience'
 import { Certifications } from './sections/Certifications'
 import { Contact } from './sections/Contact'
+import { Navbar } from './components/Navbar'
+import { CursorTrail } from './components/CursorTrail'
 import { ProjectDrawer } from './components/ProjectDrawer'
+import { translations } from './data/i18n'
+import type { Locale, Project } from './data/types'
 
 function getInitialLocale(): Locale {
   if (typeof window === 'undefined') {
     return 'pt'
   }
-
   const stored = window.localStorage.getItem('thiago-portfolio-locale')
   return stored === 'en' || stored === 'pt' ? stored : 'pt'
 }
@@ -24,6 +24,7 @@ function getInitialLocale(): Locale {
 function App() {
   const [locale, setLocale] = useState<Locale>(getInitialLocale)
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
+  
   const t = useMemo(() => translations[locale], [locale])
 
   useEffect(() => {
@@ -33,34 +34,29 @@ function App() {
 
     const metaDescription = document.querySelector('meta[name="description"]')
     metaDescription?.setAttribute('content', t.meta.description)
-
-    const ogTitle = document.querySelector('meta[property="og:title"]')
-    ogTitle?.setAttribute('content', t.meta.title)
-
-    const ogDescription = document.querySelector('meta[property="og:description"]')
-    ogDescription?.setAttribute('content', t.meta.description)
   }, [locale, t])
 
   return (
-    <>
-      {/* Layer 0: Deep space background handled by index.css */}
-
-      {/* Layer 1: Starfield canvas (z-index: 1 set in component) */}
-      <Starfield />
-
-      {/* Layer 2+: All content above the effects */}
-      <Navbar locale={locale} t={t} onLocaleChange={setLocale} />
-      <main key={locale} className="relative" style={{ zIndex: 5 }}>
-        <Hero t={t} />
-        <About t={t} />
-        <Skills t={t} />
-        <Projects locale={locale} t={t} onDetails={setSelectedProject} />
-        <Experience t={t} />
-        <Certifications t={t} />
+    <div className="relative min-h-screen selection:bg-vanilla-text selection:text-vanilla-bg">
+      <CursorTrail />
+      
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 border-x border-vanilla-border bg-vanilla-bg">
+        <Navbar locale={locale} t={t} onLocaleChange={setLocale} />
+        
+        <main className="flex flex-col gap-0 divide-y divide-vanilla-border">
+          <Hero t={t} />
+          <About t={t} />
+          <Skills t={t} />
+          <Projects locale={locale} t={t} onDetails={setSelectedProject} />
+          <Experience t={t} />
+          <Certifications t={t} />
+        </main>
+        
         <Contact t={t} />
-      </main>
+      </div>
+
       <ProjectDrawer project={selectedProject} locale={locale} t={t} onClose={() => setSelectedProject(null)} />
-    </>
+    </div>
   )
 }
 
