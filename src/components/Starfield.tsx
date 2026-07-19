@@ -6,12 +6,13 @@ type Star = {
   z: number;
   radius: number;
   color: string;
-  velocity: number;
+  alpha: number;
+  twinkleSpeed: number;
 };
 
 export function Starfield() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const reduceMotion = false;
+  const reduceMotion = false; // Could be from a hook
 
   useEffect(() => {
     if (reduceMotion) return;
@@ -27,11 +28,19 @@ export function Starfield() {
     let width = window.innerWidth;
     let height = window.innerHeight;
 
+    // Mouse positions for parallax
     let targetMouse = { x: width / 2, y: height / 2 };
     let currentMouse = { x: width / 2, y: height / 2 };
     
-    // Theme colors: white, light blue (royal), pink (candy), purple
-    const colors = ['#ffffff', '#ffffff', '#315CFF', '#FF4D6D', '#7A3CFF'];
+    // Deep space realistic colors (mostly white, some cyan, rare pink/purple)
+    const colors = [
+      '#ffffff', '#ffffff', '#ffffff', '#ffffff', '#ffffff', 
+      '#e4e4ec', '#e4e4ec', 
+      '#4dc4e8', // Cyan
+      '#4dc4e8', 
+      '#8b65c8', // Purple
+      '#c46b8a'  // Pink
+    ];
 
     const init = () => {
       width = window.innerWidth;
@@ -39,55 +48,66 @@ export function Starfield() {
       canvas.width = width;
       canvas.height = height;
 
-      stars = Array.from({ length: 450 }).map(() => ({
+      // 1200+ stars for dense deep space look
+      const starCount = Math.floor((width * height) / 1200);
+      
+      stars = Array.from({ length: starCount }).map(() => ({
         x: Math.random() * width,
         y: Math.random() * height,
-        z: Math.random() * 2,
-        radius: Math.random() * 1.5 + 0.3,
+        z: Math.random() * 1.5 + 0.1, // Depth (0.1 to 1.6)
+        radius: Math.random() * 0.8 + 0.2, // Smaller realistic stars
         color: colors[Math.floor(Math.random() * colors.length)],
-        velocity: Math.random() * 0.15 + 0.05,
+        alpha: Math.random(),
+        twinkleSpeed: (Math.random() * 0.02) + 0.005,
       }));
     };
 
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
       
-      // Interpolate mouse movement for smoothness
-      currentMouse.x += (targetMouse.x - currentMouse.x) * 0.1;
-      currentMouse.y += (targetMouse.y - currentMouse.y) * 0.1;
+      // Interpolate mouse movement for smooth parallax
+      currentMouse.x += (targetMouse.x - currentMouse.x) * 0.05;
+      currentMouse.y += (targetMouse.y - currentMouse.y) * 0.05;
       
+      // Calculate mouse offset from center (-1 to 1)
+      const mouseXOffset = (currentMouse.x - width / 2) / (width / 2);
+      const mouseYOffset = (currentMouse.y - height / 2) / (height / 2);
+
       stars.forEach((star) => {
-        // Move stars slowly upwards to create parallax drifting
-        star.y -= star.velocity;
+        // Twinkle effect (sine wave based on time)
+        star.alpha += star.twinkleSpeed;
+        const currentAlpha = (Math.sin(star.alpha) * 0.5 + 0.5) * (star.z * 0.6 + 0.4);
 
-        // Reset if they go off top
-        if (star.y < 0) {
-          star.y = height;
-          star.x = Math.random() * width;
-        }
+        // Parallax offset based on depth (z)
+        // Closer stars (higher z) move more
+        const offsetX = mouseXOffset * 40 * star.z;
+        const offsetY = mouseYOffset * 40 * star.z;
 
-        // Mouse repulsion
-        const dx = currentMouse.x - star.x;
-        const dy = currentMouse.y - star.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        
-        let offsetX = 0;
-        let offsetY = 0;
-        const repulsionRadius = 180;
+        // Apply slight continuous drift
+        star.y -= 0.1 * star.z;
+        star.x -= 0.05 * star.z;
 
-        if (distance < repulsionRadius) {
-          // Calculate force (stronger closer to the center, softening out)
-          const force = Math.pow((repulsionRadius - distance) / repulsionRadius, 2);
-          offsetX = -(dx / distance) * force * 18;
-          offsetY = -(dy / distance) * force * 18;
-        }
+        // Wrap around screen
+        if (star.y < 0) star.y = height;
+        if (star.x < 0) star.x = width;
+        if (star.y > height) star.y = 0;
+        if (star.x > width) star.x = 0;
 
+        // Draw star
         ctx.beginPath();
-        ctx.arc(star.x + offsetX, star.y + offsetY, star.radius, 0, Math.PI * 2);
-        ctx.fillStyle = star.color;
+        // Calculate final position wrapping around properly with parallax
+        let finalX = star.x + offsetX;
+        let finalY = star.y + offsetY;
         
-        // Depth simulation (opacity based on Z)
-        ctx.globalAlpha = star.z * 0.4 + 0.15;
+        // Wrap final drawn position so it doesn't leave empty edges
+        if (finalX < 0) finalX += width;
+        if (finalX > width) finalX -= width;
+        if (finalY < 0) finalY += height;
+        if (finalY > height) finalY -= height;
+
+        ctx.arc(finalX, finalY, star.radius, 0, Math.PI * 2);
+        ctx.fillStyle = star.color;
+        ctx.globalAlpha = currentAlpha;
         ctx.fill();
         ctx.globalAlpha = 1;
       });

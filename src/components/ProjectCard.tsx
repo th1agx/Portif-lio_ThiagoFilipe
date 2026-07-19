@@ -1,28 +1,23 @@
-import { Code2, ExternalLink, PanelRightOpen } from 'lucide-react'
+import { Code2, ExternalLink, ArrowRight } from 'lucide-react'
 import { motion } from 'framer-motion'
 import type { MouseEvent } from 'react'
 import type { Locale, Project, Translation } from '../data/types'
-import { Button } from './Button'
 import { ProjectPreview } from './ProjectPreview'
-import { TechBadge } from './TechBadge'
 
 type ProjectCardProps = {
   project: Project
   locale: Locale
   t: Translation
-  compact?: boolean
+  compact?: boolean // kept for backwards compat but ignored in our unified grid
   onDetails: (project: Project) => void
 }
 
-export function ProjectCard({ project, locale, t, compact = false, onDetails }: ProjectCardProps) {
+export function ProjectCard({ project, locale, t, onDetails }: ProjectCardProps) {
   function handleMouseMove(event: MouseEvent<HTMLElement>) {
     const rect = event.currentTarget.getBoundingClientRect()
     event.currentTarget.style.setProperty('--spotlight-x', `${event.clientX - rect.left}px`)
     event.currentTarget.style.setProperty('--spotlight-y', `${event.clientY - rect.top}px`)
   }
-
-  const previewLabel =
-    project.previewLabel?.[locale] ?? (project.previewKind === 'real' ? t.common.realPreview : t.common.conceptualPreview)
 
   return (
     <motion.article
@@ -31,50 +26,63 @@ export function ProjectCard({ project, locale, t, compact = false, onDetails }: 
         hidden: { opacity: 0, y: 26, scale: 0.98 },
         visible: { opacity: 1, y: 0, scale: 1 },
       }}
-      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-      whileHover={{ y: -7, rotateX: 1.2, rotateY: -1.2 }}
+      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
       onMouseMove={handleMouseMove}
-      className="studio-card-spotlight group overflow-hidden rounded-lg border border-white/10 bg-studio-surface/82 shadow-glow backdrop-blur transition-colors duration-300 hover:border-studio-royal/45"
+      className="project-card-overlay group flex flex-col justify-end min-h-[400px] rounded-2xl bg-galaxy-surface"
     >
-      <div className={`${compact ? 'aspect-[16/9]' : 'aspect-[16/10]'} relative z-10 overflow-hidden`}>
+      <div className="absolute inset-0 z-0 opacity-60 transition-opacity duration-500 group-hover:opacity-100">
         <ProjectPreview project={project} />
       </div>
-      <div className="relative z-10 p-5">
-        <div className="mb-3 flex flex-wrap items-center gap-2">
-          <span className="rounded bg-studio-royal/15 px-2 py-1 font-mono text-[0.68rem] font-bold uppercase text-studio-text">
-            {project.status[locale]}
-          </span>
-          <span className="rounded bg-white/[0.05] px-2 py-1 font-mono text-[0.68rem] font-bold uppercase text-studio-muted">
-            {previewLabel}
-          </span>
+      
+      <div className="relative z-10 p-6 sm:p-8 flex flex-col gap-4">
+        <div>
+          <h3 className="font-display text-2xl font-bold tracking-tight text-galaxy-text mb-2">
+            {project.title[locale]}
+          </h3>
+          <p className="text-sm font-medium text-galaxy-subtle line-clamp-2">
+            {project.description[locale]}
+          </p>
         </div>
-        <h3 className="font-display text-xl font-bold text-studio-text">{project.title[locale]}</h3>
-        <p className="mt-3 min-h-[5.25rem] text-sm leading-6 text-studio-muted">{project.description[locale]}</p>
-        <p className="mt-3 border-l-2 border-studio-candy pl-3 text-sm font-semibold text-studio-text">
-          {project.value[locale]}
-        </p>
-        <div className="mt-4 flex flex-wrap gap-2">
-          {project.technologies.slice(0, 5).map((tech) => (
-            <motion.span key={tech} whileHover={{ y: -2, scale: 1.03 }} transition={{ type: 'spring', stiffness: 380, damping: 22 }}>
-              <TechBadge label={tech} />
-            </motion.span>
+
+        <div className="flex flex-wrap gap-x-2 gap-y-1 text-xs font-mono text-galaxy-muted">
+          {project.technologies.slice(0, 4).map((tech, i) => (
+            <span key={tech}>
+              {tech}
+              {i < Math.min(project.technologies.length, 4) - 1 && <span className="ml-2 text-white/20">·</span>}
+            </span>
           ))}
+          {project.technologies.length > 4 && <span>+{project.technologies.length - 4}</span>}
         </div>
-        <div className="mt-5 flex flex-wrap gap-2">
-          <Button href={project.repoUrl} target="_blank" rel="noreferrer" variant="secondary">
-            <Code2 size={16} /> {t.common.github}
-          </Button>
+
+        <div className="mt-4 flex flex-wrap gap-4 border-t border-white/5 pt-6">
           <button
             type="button"
             onClick={() => onDetails(project)}
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-white/15 bg-white/[0.06] px-4 py-2 text-sm font-bold text-studio-text transition hover:border-studio-candy/70 hover:bg-white/[0.1]"
+            className="flex items-center gap-2 text-sm font-medium text-galaxy-text transition-colors hover:text-galaxy-cyan"
           >
-            <PanelRightOpen size={16} /> {t.common.details}
+            {t.common.details} <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
           </button>
+          
+          <div className="flex-1" />
+          
+          <a
+            href={project.repoUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-2 text-sm font-medium text-galaxy-muted hover:text-galaxy-text transition-colors"
+          >
+            <Code2 size={16} /> <span className="hidden sm:inline">Code</span>
+          </a>
+          
           {project.demoUrl ? (
-            <Button href={project.demoUrl} target="_blank" rel="noreferrer">
-              <ExternalLink size={16} /> {t.common.demo}
-            </Button>
+            <a
+              href={project.demoUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center gap-2 text-sm font-medium text-galaxy-cyan hover:text-galaxy-cyan/80 transition-colors"
+            >
+              <ExternalLink size={16} /> <span className="hidden sm:inline">Demo</span>
+            </a>
           ) : null}
         </div>
       </div>

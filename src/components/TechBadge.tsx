@@ -1,6 +1,7 @@
 export function TechBadge({ label }: { label: string }) {
   return (
-    <span className="rounded border border-white/10 bg-white/[0.05] px-2.5 py-1 font-mono text-[0.68rem] font-bold uppercase tracking-normal text-studio-muted">
+    <span className="tech-badge inline-flex items-center gap-1.5">
+      <span className="h-1 w-1 rounded-full bg-galaxy-cyan/40" />
       {label}
     </span>
   )

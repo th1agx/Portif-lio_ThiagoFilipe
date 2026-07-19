@@ -23,12 +23,12 @@ export function MotionSection({ id, children, className = '', variant = 'rise' }
     let initialVars: gsap.TweenVars = { opacity: 0 }
     
     if (variant === 'rise') {
-      initialVars.y = 80
+      initialVars.y = 120
     } else if (variant === 'slide') {
-      initialVars.x = -60
+      initialVars.x = -80
     } else if (variant === 'scale') {
-      initialVars.y = 40
-      initialVars.scale = 0.92
+      initialVars.y = 60
+      initialVars.scale = 0.9
     }
 
     gsap.set(sectionRef.current, initialVars)
@@ -38,19 +38,18 @@ export function MotionSection({ id, children, className = '', variant = 'rise' }
       y: 0,
       x: 0,
       scale: 1,
-      duration: 1.2,
-      ease: 'power3.out',
+      ease: 'power4.out',
       scrollTrigger: {
         trigger: sectionRef.current,
-        start: 'top 85%',
-        end: 'top 30%',
-        scrub: 1, 
+        start: 'top 90%',
+        end: 'top 40%',
+        scrub: 0.8, // Smooth scrub
       },
     })
   }, { scope: sectionRef, dependencies: [variant, reduceMotion] })
 
   return (
-    <section id={id} className={className} ref={sectionRef}>
+    <section id={id} className={`gsap-reveal ${className}`} ref={sectionRef}>
       {children}
     </section>
   )
