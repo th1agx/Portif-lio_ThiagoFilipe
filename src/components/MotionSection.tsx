@@ -1,56 +1,28 @@
-import { useRef } from 'react'
+import { motion } from 'framer-motion'
 import type { ReactNode } from 'react'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { useGSAP } from '@gsap/react'
 
-gsap.registerPlugin(ScrollTrigger)
-
-type MotionSectionProps = {
-  id: string
+export function MotionSection({
+  children,
+  className = '',
+  delay = 0,
+}: {
   children: ReactNode
   className?: string
-  variant?: 'rise' | 'slide' | 'scale'
-}
-
-export function MotionSection({ id, children, className = '', variant = 'rise' }: MotionSectionProps) {
-  const reduceMotion = false
-  const sectionRef = useRef<HTMLElement>(null)
-
-  useGSAP(() => {
-    if (reduceMotion || !sectionRef.current) return
-
-    let initialVars: gsap.TweenVars = { opacity: 0 }
-    
-    if (variant === 'rise') {
-      initialVars.y = 120
-    } else if (variant === 'slide') {
-      initialVars.x = -80
-    } else if (variant === 'scale') {
-      initialVars.y = 60
-      initialVars.scale = 0.9
-    }
-
-    gsap.set(sectionRef.current, initialVars)
-
-    gsap.to(sectionRef.current, {
-      opacity: 1,
-      y: 0,
-      x: 0,
-      scale: 1,
-      ease: 'power4.out',
-      scrollTrigger: {
-        trigger: sectionRef.current,
-        start: 'top 90%',
-        end: 'top 40%',
-        scrub: 0.8, // Smooth scrub
-      },
-    })
-  }, { scope: sectionRef, dependencies: [variant, reduceMotion] })
-
+  delay?: number
+}) {
   return (
-    <section id={id} className={`gsap-reveal ${className}`} ref={sectionRef}>
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-10%' }}
+      transition={{
+        duration: 0.6,
+        delay,
+        ease: [0.16, 1, 0.3, 1], // Custom Jitter/GSAP style easing
+      }}
+      className={className}
+    >
       {children}
-    </section>
+    </motion.div>
   )
 }

@@ -1,5 +1,5 @@
 import { Menu, X } from 'lucide-react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion, useScroll, useMotionValueEvent } from 'framer-motion'
 import { useState } from 'react'
 import type { Locale, Translation } from '../data/types'
 import { LanguageToggle } from './LanguageToggle'
@@ -12,6 +12,18 @@ type NavbarProps = {
 
 export function Navbar({ locale, t, onLocaleChange }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false)
+  const [isVisible, setIsVisible] = useState(true)
+  const { scrollY } = useScroll()
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    // Show navbar always unless we scroll down fast, or just keep it floating.
+    // Let's keep it always floating, but maybe add a backdrop shadow on scroll.
+    if (latest > 50) {
+      setIsVisible(true)
+    } else {
+      setIsVisible(true)
+    }
+  })
 
   const toggleMenu = () => setIsOpen(!isOpen)
 
@@ -25,65 +37,67 @@ export function Navbar({ locale, t, onLocaleChange }: NavbarProps) {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-40 bg-vanilla-bg border-b border-vanilla-border">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+      <motion.nav
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ 
+          y: isVisible || isOpen ? 0 : -100,
+          opacity: isVisible || isOpen ? 1 : 0 
+        }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        className="fixed left-0 right-0 top-6 z-50 mx-auto max-w-fit px-4"
+      >
+        <div className="flex items-center gap-6 rounded-full border border-vanilla-border bg-vanilla-bg/70 px-6 py-3 backdrop-blur-md shadow-subtle">
           <div className="flex shrink-0 items-center">
-            <span className="font-display text-2xl font-black tracking-tightest text-vanilla-text">
-              TF.
+            <span className="font-display text-lg font-bold tracking-tight text-vanilla-text">
+              Thiago Filipe
             </span>
           </div>
-          
-          <div className="hidden md:flex md:items-center md:space-x-8">
+          <div className="hidden md:flex md:items-center md:gap-6">
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
-                className="text-sm font-bold text-vanilla-text hover:text-vanilla-muted transition-colors"
+                className="text-sm font-bold text-vanilla-muted transition-colors hover:text-vanilla-text"
               >
                 {link.name}
               </a>
             ))}
-            <div className="pl-4 border-l border-vanilla-border">
-              <LanguageToggle locale={locale} onToggle={onLocaleChange} />
-            </div>
           </div>
-
+          <div className="hidden md:block pl-2 border-l border-vanilla-border">
+            <LanguageToggle locale={locale} onToggle={onLocaleChange} />
+          </div>
+          
+          {/* Hamburger for mobile */}
           <div className="flex md:hidden">
-            <button
-              onClick={toggleMenu}
-              type="button"
-              className="inline-flex items-center justify-center p-2 text-vanilla-text"
-              aria-expanded={isOpen}
-            >
-              <span className="sr-only">Open main menu</span>
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
+            <button onClick={toggleMenu} type="button" className="text-vanilla-text hover:text-vanilla-muted">
+              {isOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
         </div>
-      </nav>
+      </motion.nav>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-x-0 top-16 z-30 bg-vanilla-bg border-b border-vanilla-border md:hidden"
+            initial={{ opacity: 0, y: -20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.95 }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed inset-x-4 top-24 z-40 rounded-2xl border border-vanilla-border bg-vanilla-bg/95 p-6 backdrop-blur-xl md:hidden shadow-subtle"
           >
-            <div className="space-y-1 px-4 pb-3 pt-2 sm:px-6">
+            <div className="flex flex-col space-y-4">
               {navLinks.map((link) => (
                 <a
                   key={link.name}
                   href={link.href}
                   onClick={() => setIsOpen(false)}
-                  className="block px-3 py-2 text-base font-bold text-vanilla-text hover:bg-vanilla-border"
+                  className="text-lg font-bold text-vanilla-text"
                 >
                   {link.name}
                 </a>
               ))}
-              <div className="px-3 pt-4 pb-2 border-t border-vanilla-border">
+              <div className="pt-4 border-t border-vanilla-border">
                 <LanguageToggle locale={locale} onToggle={onLocaleChange} />
               </div>
             </div>

@@ -11,8 +11,8 @@
 }
 
 body {
-  background-color: #F5F4EE;
-  color: #111111;
+  background-color: #F4F1EA;
+  color: #1A1A1A;
   font-family: 'Satoshi', sans-serif;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
@@ -20,8 +20,8 @@ body {
 }
 
 ::selection {
-  background-color: #111111;
-  color: #F5F4EE;
+  background-color: #1A1A1A;
+  color: #F4F1EA;
 }
 
 /* ──────────────────────────────────────────

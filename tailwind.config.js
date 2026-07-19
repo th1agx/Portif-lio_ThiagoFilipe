@@ -5,10 +5,10 @@ export default {
     extend: {
       colors: {
         vanilla: {
-          bg: '#F5F4EE', // Off-white creamy background
-          text: '#111111', // Deep black text
-          muted: '#555555', // Grey text for secondary info
-          border: 'rgba(17, 17, 17, 0.12)', // Thin black borders for grid lines
+          bg: '#F4F1EA', // Warm Vanilla background
+          text: '#1A1A1A', // Rich Charcoal text
+          muted: '#666666', // Softer grey for secondary text
+          border: 'rgba(26, 26, 26, 0.08)', // Very thin subtle lines
         },
       },
       fontFamily: {

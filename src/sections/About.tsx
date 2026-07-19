@@ -1,6 +1,6 @@
 import { SectionHeader } from '../components/SectionHeader'
+import { MotionSection } from '../components/MotionSection'
 import type { Translation } from '../data/types'
-import { motion } from 'framer-motion'
 
 export function About({ t }: { t: Translation }) {
   return (
@@ -8,47 +8,30 @@ export function About({ t }: { t: Translation }) {
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-12 lg:grid-cols-[2fr_3fr] items-start">
           
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: false, amount: 0.3 }}
-            transition={{ duration: 0.8 }}
-            className="w-full"
-          >
-            {/* Imagem em P&B com contorno rígido - Estilo Editorial */}
-            <div className="aspect-[3/4] w-full overflow-hidden border border-vanilla-border bg-vanilla-bg p-2">
+          <MotionSection className="w-full">
+            <div className="aspect-[3/4] w-full overflow-hidden rounded-2xl bg-vanilla-bg shadow-subtle border border-vanilla-border/50">
               <img
                 src="./profile/thiago-filipe.jpeg"
                 alt={t.hero.photoAlt}
-                className="h-full w-full object-cover object-[50%_18%] grayscale contrast-125"
+                className="h-full w-full object-cover object-[50%_18%] transition-transform duration-700 hover:scale-105"
                 loading="lazy"
               />
             </div>
-            <p className="mt-4 font-mono text-xs font-bold uppercase tracking-widest2 text-vanilla-muted">
-              FIG 1. — {t.hero.photoAlt}
-            </p>
-          </motion.div>
+          </MotionSection>
 
-          <div className="lg:pl-12 lg:border-l lg:border-vanilla-border h-full">
+          <MotionSection delay={0.2} className="h-full flex flex-col justify-center">
             <SectionHeader eyebrow={t.about.eyebrow} title={t.about.title} />
-            <motion.div
-              className="flex flex-col gap-8"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: false, amount: 0.1 }}
-              variants={{ visible: { transition: { staggerChildren: 0.15 } } }}
-            >
+            <div className="flex flex-col gap-6">
               {t.about.paragraphs.map((paragraph, i) => (
-                <motion.p
+                <p
                   key={paragraph}
-                  variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } } }}
                   className={`text-lg leading-relaxed ${i === 0 ? 'text-2xl font-medium text-vanilla-text leading-snug' : 'text-vanilla-muted'}`}
                 >
                   {paragraph}
-                </motion.p>
+                </p>
               ))}
-            </motion.div>
-          </div>
+            </div>
+          </MotionSection>
 
         </div>
       </div>

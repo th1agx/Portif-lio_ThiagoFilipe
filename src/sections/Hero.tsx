@@ -1,45 +1,58 @@
 import { motion } from 'framer-motion'
 import { ArrowDown } from 'lucide-react'
 import type { Translation } from '../data/types'
+import { MotionSection } from '../components/MotionSection'
 
 export function Hero({ t }: { t: Translation }) {
-  const reduceMotion = false
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.15, delayChildren: 0.1 },
+    },
+  }
+
+  const item = {
+    hidden: { opacity: 0, y: 30 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as const } },
+  }
 
   return (
-    <section id="home" className="relative flex min-h-[90vh] flex-col justify-center px-4 py-32 sm:px-6 lg:px-8">
-      
+    <section id="home" className="relative flex min-h-screen flex-col justify-center px-4 pt-20 pb-32 sm:px-6 lg:px-8">
       <div className="mx-auto w-full max-w-7xl">
         <motion.div
-          initial={reduceMotion ? { opacity: 1 } : { opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+          variants={container}
+          initial="hidden"
+          animate="show"
           className="flex flex-col gap-6"
         >
-          <h1 className="font-display text-5xl sm:text-7xl md:text-[7rem] font-black tracking-tightest leading-[0.85] text-vanilla-text uppercase">
-            <span className="block">{t.hero.title}</span>
-            <span className="block text-vanilla-muted">{t.hero.subtitle}</span>
-          </h1>
+          <div className="overflow-hidden">
+            <motion.h1 variants={item} className="font-display text-5xl sm:text-7xl font-bold tracking-tight text-vanilla-text">
+              {t.hero.title}
+            </motion.h1>
+          </div>
+          
+          <div className="overflow-hidden">
+            <motion.h2 variants={item} className="font-display text-4xl sm:text-6xl font-medium tracking-tight text-vanilla-muted">
+              {t.hero.subtitle}
+            </motion.h2>
+          </div>
 
-          <div className="mt-8 flex flex-col md:flex-row md:items-end justify-between gap-12 border-t border-vanilla-border pt-8">
-            <p className="max-w-xl text-xl leading-relaxed text-vanilla-text font-medium">
+          <motion.div variants={item} className="mt-12 flex flex-col md:flex-row md:items-end justify-between gap-12">
+            <p className="max-w-xl text-2xl leading-relaxed text-vanilla-text font-medium">
               Software Engineer focado em IA, Automação e Sistemas de Alta Performance.
             </p>
             
             <a 
               href="#sobre"
-              className="group flex h-16 w-16 items-center justify-center rounded-full border border-vanilla-border transition-colors hover:bg-vanilla-text hover:text-vanilla-bg shrink-0"
+              className="group flex h-16 w-16 items-center justify-center rounded-full bg-vanilla-text text-vanilla-bg transition-transform hover:scale-105 shrink-0"
             >
               <ArrowDown size={24} className="transition-transform group-hover:translate-y-1" />
             </a>
-          </div>
+          </motion.div>
         </motion.div>
 
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.5 }}
-          className="mt-24 flex flex-wrap gap-8 md:gap-16 border-t border-vanilla-border pt-8"
-        >
+        <MotionSection delay={0.6} className="mt-32 flex flex-wrap gap-8 md:gap-16 border-t border-vanilla-border pt-8">
           {t.hero.metrics.map((metric) => (
             <span
               key={metric}
@@ -48,7 +61,7 @@ export function Hero({ t }: { t: Translation }) {
               {metric}
             </span>
           ))}
-        </motion.div>
+        </MotionSection>
       </div>
     </section>
   )

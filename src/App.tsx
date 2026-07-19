@@ -37,13 +37,13 @@ function App() {
   }, [locale, t])
 
   return (
-    <div className="relative min-h-screen selection:bg-vanilla-text selection:text-vanilla-bg">
+    <div className="relative min-h-screen selection:bg-vanilla-text selection:text-vanilla-bg bg-vanilla-bg">
       <CursorTrail />
       
-      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 border-x border-vanilla-border bg-vanilla-bg">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <Navbar locale={locale} t={t} onLocaleChange={setLocale} />
         
-        <main className="flex flex-col gap-0 divide-y divide-vanilla-border">
+        <main className="flex flex-col gap-0">
           <Hero t={t} />
           <About t={t} />
           <Skills t={t} />
