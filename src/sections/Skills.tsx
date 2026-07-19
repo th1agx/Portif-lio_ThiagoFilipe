@@ -20,7 +20,7 @@ export function Skills({ t }: { t: Translation }) {
           variants={{ visible: { transition: { staggerChildren: 0.08 } } }}
         >
           {t.skills.groups.map((group, index) => {
-            const Icon = icons[index]
+            const Icon = icons[index] || Code2
             return (
               <motion.article
                 key={group.title}

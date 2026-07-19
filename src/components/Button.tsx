@@ -1,14 +1,23 @@
-import type { AnchorHTMLAttributes, ReactNode } from 'react'
+import type { ComponentPropsWithoutRef, ElementType, ReactNode } from 'react'
 import clsx from 'clsx'
 
-type ButtonProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
+type ButtonProps<T extends ElementType = 'a'> = {
+  as?: T
   children: ReactNode
   variant?: 'primary' | 'secondary' | 'ghost'
-}
+} & ComponentPropsWithoutRef<T>
 
-export function Button({ children, className, variant = 'primary', ...props }: ButtonProps) {
+export function Button<T extends ElementType = 'a'>({
+  as,
+  children,
+  className,
+  variant = 'primary',
+  ...props
+}: ButtonProps<T>) {
+  const Component = as || 'a'
+
   return (
-    <a
+    <Component
       className={clsx(
         'inline-flex min-h-11 items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-bold transition duration-200 hover:-translate-y-0.5 active:translate-y-0',
         'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-studio-candy',
@@ -22,6 +31,6 @@ export function Button({ children, className, variant = 'primary', ...props }: B
       {...props}
     >
       {children}
-    </a>
+    </Component>
   )
 }

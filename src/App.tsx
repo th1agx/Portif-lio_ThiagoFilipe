@@ -32,6 +32,12 @@ function App() {
 
     const metaDescription = document.querySelector('meta[name="description"]')
     metaDescription?.setAttribute('content', t.meta.description)
+
+    const ogTitle = document.querySelector('meta[property="og:title"]')
+    ogTitle?.setAttribute('content', t.meta.title)
+
+    const ogDescription = document.querySelector('meta[property="og:description"]')
+    ogDescription?.setAttribute('content', t.meta.description)
   }, [locale, t])
 
   return (
