@@ -4,7 +4,7 @@
 
 :root {
   color: #f4f7fb;
-  background: #070812;
+  background: #000000;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -24,11 +24,7 @@ body {
   min-height: 100vh;
   margin: 0;
   overflow-x: hidden;
-  background:
-    radial-gradient(circle at 20% 40%, rgba(255, 42, 109, 0.25), transparent 45rem),
-    radial-gradient(circle at 80% 20%, rgba(113, 28, 255, 0.25), transparent 40rem),
-    radial-gradient(circle at 50% 90%, rgba(5, 213, 255, 0.2), transparent 45rem),
-    linear-gradient(180deg, #000000 0%, #0a0514 50%, #000000 100%);
+  background: #000000;
   color: #f4f7fb;
 }
 
@@ -37,17 +33,7 @@ body::before {
 }
 
 body::after {
-  position: fixed;
-  inset: -20%;
-  z-index: -2;
-  pointer-events: none;
-  content: '';
-  background:
-    linear-gradient(115deg, transparent 0%, rgba(49, 92, 255, 0.12) 28%, transparent 46%),
-    linear-gradient(245deg, transparent 10%, rgba(122, 60, 255, 0.13) 42%, rgba(255, 77, 109, 0.08) 58%, transparent 78%);
-  filter: blur(26px);
-  transform: translate3d(0, 0, 0);
-  animation: studio-aurora 18s ease-in-out infinite alternate;
+  display: none;
 }
 
 a {

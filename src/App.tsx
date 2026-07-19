@@ -43,9 +43,44 @@ function App() {
 
   return (
     <>
+      {/* Layer 0: Galaxy gradient — sits ABOVE body's black bg */}
+      <div
+        className="fixed inset-0 pointer-events-none"
+        style={{ zIndex: 0 }}
+        aria-hidden="true"
+      >
+        <div
+          className="absolute inset-0"
+          style={{
+            background: [
+              'radial-gradient(ellipse 80% 60% at 20% 40%, rgba(255, 42, 109, 0.45), transparent)',
+              'radial-gradient(ellipse 70% 55% at 80% 20%, rgba(113, 28, 255, 0.45), transparent)',
+              'radial-gradient(ellipse 80% 50% at 50% 90%, rgba(5, 213, 255, 0.3), transparent)',
+              'linear-gradient(180deg, #000000 0%, #0a0518 50%, #000000 100%)',
+            ].join(', '),
+          }}
+        />
+        {/* Aurora overlay */}
+        <div
+          className="absolute"
+          style={{
+            inset: '-20%',
+            background: [
+              'linear-gradient(115deg, transparent 0%, rgba(49, 92, 255, 0.18) 28%, transparent 46%)',
+              'linear-gradient(245deg, transparent 10%, rgba(122, 60, 255, 0.18) 42%, rgba(255, 77, 109, 0.12) 58%, transparent 78%)',
+            ].join(', '),
+            filter: 'blur(26px)',
+            animation: 'studio-aurora 18s ease-in-out infinite alternate',
+          }}
+        />
+      </div>
+
+      {/* Layer 1: Starfield canvas (z-index: 1 set in component) */}
       <Starfield />
+
+      {/* Layer 2+: All content above the effects */}
       <Navbar locale={locale} t={t} onLocaleChange={setLocale} />
-      <main key={locale}>
+      <main key={locale} className="relative" style={{ zIndex: 5 }}>
         <Hero t={t} />
         <About t={t} />
         <Skills t={t} />
