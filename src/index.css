@@ -25,23 +25,15 @@ body {
   margin: 0;
   overflow-x: hidden;
   background:
-    radial-gradient(circle at 10% 10%, rgba(49, 92, 255, 0.16), transparent 28rem),
-    radial-gradient(circle at 80% 0%, rgba(122, 60, 255, 0.16), transparent 26rem),
-    linear-gradient(180deg, #070812 0%, #090b16 48%, #070812 100%);
+    radial-gradient(circle at 15% 50%, rgba(49, 92, 255, 0.12), transparent 35rem),
+    radial-gradient(circle at 85% 30%, rgba(122, 60, 255, 0.12), transparent 30rem),
+    radial-gradient(circle at 50% 80%, rgba(255, 77, 109, 0.08), transparent 35rem),
+    linear-gradient(180deg, #03040b 0%, #060714 40%, #03040b 100%);
   color: #f4f7fb;
 }
 
 body::before {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  content: '';
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
-  background-size: 52px 52px;
-  mask-image: linear-gradient(to bottom, black 0%, transparent 78%);
+  display: none;
 }
 
 body::after {
@@ -104,6 +96,31 @@ a {
 }
 
 .studio-card-spotlight:hover::before {
+  opacity: 1;
+}
+
+.studio-card-spotlight::after {
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  pointer-events: none;
+  content: '';
+  opacity: 0;
+  background: radial-gradient(
+    280px circle at var(--spotlight-x) var(--spotlight-y),
+    rgba(255, 77, 109, 0.8),
+    rgba(122, 60, 255, 0.5) 40%,
+    transparent 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  padding: 1px;
+  transition: opacity 220ms ease;
+  z-index: 10;
+}
+
+.studio-card-spotlight:hover::after {
   opacity: 1;
 }
 

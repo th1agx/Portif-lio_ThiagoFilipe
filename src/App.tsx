@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { Locale, Project } from './data/types'
 import { translations } from './data/i18n'
+import { Starfield } from './components/Starfield'
 import { Navbar } from './components/Navbar'
 import { Hero } from './sections/Hero'
 import { About } from './sections/About'
@@ -42,6 +43,7 @@ function App() {
 
   return (
     <>
+      <Starfield />
       <Navbar locale={locale} t={t} onLocaleChange={setLocale} />
       <main key={locale}>
         <Hero t={t} />

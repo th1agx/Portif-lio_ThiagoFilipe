@@ -1,5 +1,11 @@
-import { motion, useReducedMotion } from 'framer-motion'
+import { useRef } from 'react'
 import type { ReactNode } from 'react'
+import { useReducedMotion } from 'framer-motion'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useGSAP } from '@gsap/react'
+
+gsap.registerPlugin(ScrollTrigger)
 
 type MotionSectionProps = {
   id: string
@@ -8,35 +14,45 @@ type MotionSectionProps = {
   variant?: 'rise' | 'slide' | 'scale'
 }
 
-const variants = {
-  rise: {
-    hidden: { opacity: 0, y: 44 },
-    visible: { opacity: 1, y: 0 },
-  },
-  slide: {
-    hidden: { opacity: 0, x: -34 },
-    visible: { opacity: 1, x: 0 },
-  },
-  scale: {
-    hidden: { opacity: 0, y: 26, scale: 0.98 },
-    visible: { opacity: 1, y: 0, scale: 1 },
-  },
-}
-
 export function MotionSection({ id, children, className = '', variant = 'rise' }: MotionSectionProps) {
   const reduceMotion = useReducedMotion()
+  const sectionRef = useRef<HTMLElement>(null)
+
+  useGSAP(() => {
+    if (reduceMotion || !sectionRef.current) return
+
+    let initialVars: gsap.TweenVars = { opacity: 0 }
+    
+    if (variant === 'rise') {
+      initialVars.y = 80
+    } else if (variant === 'slide') {
+      initialVars.x = -60
+    } else if (variant === 'scale') {
+      initialVars.y = 40
+      initialVars.scale = 0.92
+    }
+
+    gsap.set(sectionRef.current, initialVars)
+
+    gsap.to(sectionRef.current, {
+      opacity: 1,
+      y: 0,
+      x: 0,
+      scale: 1,
+      duration: 1.2,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: 'top 85%',
+        end: 'top 30%',
+        scrub: 1, 
+      },
+    })
+  }, { scope: sectionRef, dependencies: [variant, reduceMotion] })
 
   return (
-    <motion.section
-      id={id}
-      className={className}
-      initial={reduceMotion ? false : 'hidden'}
-      whileInView="visible"
-      viewport={{ once: false, amount: 0.16 }}
-      variants={variants[variant]}
-      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-    >
+    <section id={id} className={className} ref={sectionRef}>
       {children}
-    </motion.section>
+    </section>
   )
 }

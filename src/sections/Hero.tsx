@@ -33,13 +33,28 @@ export function Hero({ t }: { t: Translation }) {
           </motion.p>
           <motion.h1
             variants={heroItem}
-            transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
             className="max-w-4xl font-display text-4xl font-extrabold leading-[1.05] text-studio-text sm:text-6xl lg:text-7xl"
           >
-            Thiago Filipe
-            <span className="animated-gradient-text mt-3 block bg-gradient-to-r from-studio-royal via-studio-purple to-studio-candy bg-clip-text text-transparent">
-              {t.hero.title}
-            </span>
+            <div className="overflow-hidden pb-2">
+              <motion.div
+                initial={{ y: '100%', opacity: 0, rotateZ: 3 }}
+                animate={{ y: 0, opacity: 1, rotateZ: 0 }}
+                transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+                className="origin-bottom-left"
+              >
+                Thiago Filipe
+              </motion.div>
+            </div>
+            <div className="overflow-hidden mt-3">
+              <motion.span 
+                initial={{ y: '100%', opacity: 0, rotateZ: 2 }}
+                animate={{ y: 0, opacity: 1, rotateZ: 0 }}
+                transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.25 }}
+                className="animated-gradient-text block bg-gradient-to-r from-studio-royal via-studio-purple to-studio-candy bg-clip-text text-transparent origin-bottom-left"
+              >
+                {t.hero.title}
+              </motion.span>
+            </div>
           </motion.h1>
           <motion.p variants={heroItem} className="mt-6 max-w-2xl text-lg leading-8 text-studio-muted">
             {t.hero.subtitle}
@@ -79,9 +94,14 @@ export function Hero({ t }: { t: Translation }) {
           className="relative mx-auto w-full max-w-sm lg:max-w-md"
         >
           <motion.div
-            className="absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-studio-royal/35 via-studio-purple/25 to-studio-candy/25 blur-2xl"
-            animate={reduceMotion ? undefined : { opacity: [0.65, 0.95, 0.7], scale: [1, 1.03, 1] }}
-            transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut' }}
+            className="absolute -inset-8 rounded-full bg-gradient-to-br from-studio-royal/40 via-studio-purple/40 to-studio-candy/40 blur-3xl mix-blend-screen"
+            animate={reduceMotion ? undefined : { opacity: [0.6, 1, 0.6], scale: [1, 1.05, 1], rotate: [0, 5, 0] }}
+            transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+          />
+          <motion.div
+            className="absolute -inset-4 rounded-[2rem] bg-gradient-to-tr from-studio-candy/30 to-studio-royal/30 blur-2xl mix-blend-color-dodge"
+            animate={reduceMotion ? undefined : { opacity: [0.5, 0.8, 0.5], scale: [1.02, 0.98, 1.02] }}
+            transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
           />
           <div className="relative overflow-hidden rounded-2xl border border-white/15 bg-white/[0.06] p-3 shadow-glow backdrop-blur">
             <motion.div
