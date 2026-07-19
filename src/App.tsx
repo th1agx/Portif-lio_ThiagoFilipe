@@ -43,9 +43,6 @@ function App() {
 
   return (
     <>
-      <div style={{ backgroundColor: 'red', color: 'white', padding: '20px', fontSize: '24px', zIndex: 9999, position: 'fixed', top: 0, left: 0, width: '100%', textAlign: 'center' }}>
-        DEBUG ANTIGRAVITY: SE VOCÊ ESTÁ VENDO ISSO, OS ARQUIVOS FORAM ATUALIZADOS!
-      </div>
       <Starfield />
       <Navbar locale={locale} t={t} onLocaleChange={setLocale} />
       <main key={locale}>
