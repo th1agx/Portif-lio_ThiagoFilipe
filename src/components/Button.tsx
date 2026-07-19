@@ -24,7 +24,7 @@ export function Button<T extends ElementType = 'a'>({
         variant === 'ghost' && 'btn-ghost',
         className,
       )}
-      {...props}
+      {...(props as any)}
     >
       {children}
     </Component>

@@ -9,132 +9,86 @@ gsap.registerPlugin(ScrollTrigger)
 
 export function Hero({ t, isLoaded }: { t: Translation; isLoaded: boolean }) {
   const containerRef = useRef<HTMLDivElement>(null)
-  const titleRef = useRef<HTMLHeadingElement>(null)
-  const subtitleRef = useRef<HTMLHeadingElement>(null)
-  const descRef = useRef<HTMLParagraphElement>(null)
-  const badgeRef = useRef<HTMLDivElement>(null)
-  const ctaRef = useRef<HTMLAnchorElement>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
 
-  // Initial Entrance Animation
+  // Cinematic Entrance Animation
   useGSAP(() => {
-    if (!isLoaded || !containerRef.current) return
+    if (!isLoaded || !containerRef.current || !contentRef.current) return
 
     const tl = gsap.timeline({ defaults: { ease: 'power4.out' } })
 
-    tl.from('.hero-title-word', {
-      y: 80,
+    // Give it a small delay so the loading screen finishes its curtain rising
+    tl.from(contentRef.current.children, {
+      z: -500, // Starts deep in the background
       opacity: 0,
-      filter: 'blur(16px)',
-      duration: 1.4,
-      stagger: 0.05,
-      delay: 0.2
-    })
-    .from('.hero-subtitle-word', {
-      y: 50,
-      opacity: 0,
-      filter: 'blur(12px)',
-      duration: 1.2,
-      stagger: 0.03,
-    }, '-=1.0')
-    .from(descRef.current, {
-      y: 30,
-      opacity: 0,
-      duration: 1.2,
-    }, '-=0.8')
-    .from(ctaRef.current, {
-      scale: 0.5,
-      opacity: 0,
-      duration: 1.2,
-      ease: 'expo.out',
-    }, '-=1.0')
-    .from('.hero-badge', {
-      y: 20,
-      opacity: 0,
-      duration: 1,
+      filter: 'blur(20px)',
+      duration: 2.5,
       stagger: 0.1,
-    }, '-=0.8')
-
+      ease: 'expo.out',
+      delay: 0.5
+    })
   }, [isLoaded])
 
-  // Scrub Parallax on Scroll
+  // Camera Fly-through (Scroll Scrub)
   useGSAP(() => {
-    if (!containerRef.current) return
+    if (!containerRef.current || !contentRef.current) return
 
-    // The entire hero section fades and blurs out slowly as it goes up
-    gsap.to(containerRef.current, {
+    // As user scrolls down, the Hero section is pushed back slowly and gracefully into the Z-axis
+    // It coexists with the next section coming up
+    gsap.to(contentRef.current, {
+      z: -250, // Pushed gently into the background
+      yPercent: -15, // Slight parallax upwards
       opacity: 0,
-      filter: 'blur(10px)',
-      yPercent: 30, // Moves down slightly while page scrolls up (parallax)
+      filter: 'blur(15px)',
       ease: 'none',
       scrollTrigger: {
         trigger: containerRef.current,
         start: 'top top',
         end: 'bottom top',
-        scrub: true,
+        scrub: 1.2, // Smooth camera tracking
       }
     })
-
-    // Sub-elements move at different speeds (true parallax)
-    gsap.to(titleRef.current, {
-      yPercent: -40,
-      ease: 'none',
-      scrollTrigger: { trigger: containerRef.current, start: 'top top', end: 'bottom top', scrub: true }
-    })
-    
-    gsap.to(subtitleRef.current, {
-      yPercent: -20,
-      ease: 'none',
-      scrollTrigger: { trigger: containerRef.current, start: 'top top', end: 'bottom top', scrub: true }
-    })
-
-    gsap.to([descRef.current, ctaRef.current], {
-      yPercent: -60,
-      ease: 'none',
-      scrollTrigger: { trigger: containerRef.current, start: 'top top', end: 'bottom top', scrub: true }
-    })
-
   }, { scope: containerRef })
 
   const renderSplitText = (text: string, className: string) => {
     return text.split(' ').map((word, index) => (
       <span key={index} className="inline-block overflow-hidden pb-3 mr-[0.3em]">
-        <span className={`inline-block ${className} will-change-transform`}>{word}</span>
+        <span className={`inline-block ${className}`}>{word}</span>
       </span>
     ))
   }
 
   return (
-    <section id="home" className="relative flex min-h-screen flex-col justify-center px-4 pt-20 pb-32 sm:px-6 lg:px-8" ref={containerRef}>
-      <div className="mx-auto w-full max-w-7xl">
-        <div className="flex flex-col gap-6">
-          <h1 ref={titleRef} className="font-display text-5xl sm:text-7xl font-bold tracking-tight text-vanilla-text leading-[1.1] will-change-transform">
+    <section id="home" className="relative flex min-h-screen flex-col justify-center pt-20 pb-32" ref={containerRef} style={{ transformStyle: 'preserve-3d' }}>
+      <div className="mx-auto w-full" ref={contentRef} style={{ transformStyle: 'preserve-3d' }}>
+        <div className="flex flex-col gap-6 will-change-transform">
+          <h1 className="font-display text-5xl sm:text-7xl font-bold tracking-tight text-vanilla-text leading-[1.1]">
             {renderSplitText(t.hero.title, 'hero-title-word')}
           </h1>
           
-          <h2 ref={subtitleRef} className="font-display text-4xl sm:text-6xl font-medium tracking-tight text-vanilla-muted leading-[1.2] will-change-transform">
+          <h2 className="font-display text-4xl sm:text-6xl font-medium tracking-tight text-vanilla-muted leading-[1.2]">
             {renderSplitText(t.hero.subtitle, 'hero-subtitle-word')}
           </h2>
 
           <div className="mt-12 flex flex-col md:flex-row md:items-end justify-between gap-12">
-            <p ref={descRef} className="max-w-xl text-2xl leading-relaxed text-vanilla-text font-medium will-change-transform">
+            <p className="max-w-xl text-2xl leading-relaxed text-vanilla-text font-medium">
               Software Engineer focado em IA, Automação e Sistemas de Alta Performance.
             </p>
             
             <a 
-              ref={ctaRef}
               href="#sobre"
-              className="group flex h-16 w-16 items-center justify-center rounded-full bg-vanilla-text text-vanilla-bg transition-transform shrink-0 will-change-transform"
+              className="group flex h-16 w-16 items-center justify-center rounded-full bg-vanilla-text text-vanilla-bg transition-transform shrink-0 hover:scale-110"
             >
-              <ArrowDown size={24} className="transition-transform" />
+              <ArrowDown size={24} />
             </a>
           </div>
         </div>
 
-        <div ref={badgeRef} className="mt-32 flex flex-wrap gap-8 md:gap-16 border-t border-vanilla-border pt-8 will-change-transform">
+        <div className="mt-32 flex flex-wrap gap-8 md:gap-16 border-t border-vanilla-border pt-8 will-change-transform">
           {t.hero.metrics.map((metric) => (
             <span
               key={metric}
-              className="hero-badge text-sm font-bold uppercase tracking-widest2 text-vanilla-muted will-change-transform"
+              className="hero-badge text-sm font-bold uppercase tracking-widest2 text-vanilla-muted"
             >
               {metric}
             </span>
