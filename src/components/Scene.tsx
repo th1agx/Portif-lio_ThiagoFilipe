@@ -30,7 +30,8 @@ function Plexus() {
 
     // As user scrolls, the object morphs its rotation and comes closer
     gsap.to(meshRef.current.rotation, {
-      y: Math.PI * 2,
+      y: Math.PI * 6, // Spins 3 full times on full scroll down
+      x: Math.PI * 2, // Also spins on X for more dynamic movement
       z: Math.PI / 4,
       ease: 'none',
       scrollTrigger: {

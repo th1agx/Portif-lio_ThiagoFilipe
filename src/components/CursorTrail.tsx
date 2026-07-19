@@ -60,8 +60,8 @@ export function CursorTrail() {
         }
         
         // The stroke color is deep black, we use varying thickness or just solid
-        ctx.strokeStyle = '#111111'
-        ctx.lineWidth = 12
+        ctx.strokeStyle = '#e6e3dc' // Slightly darker than background for a subtle paintbrush effect behind content
+        ctx.lineWidth = 60 // Much thicker
 
         ctx.stroke()
         
@@ -85,7 +85,7 @@ export function CursorTrail() {
     <canvas
       id="cursor-canvas"
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none z-50 mix-blend-multiply opacity-80"
+      className="fixed inset-0 pointer-events-none z-[5] mix-blend-multiply opacity-50"
     />
   )
 }
