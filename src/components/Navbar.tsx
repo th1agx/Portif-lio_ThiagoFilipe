@@ -1,6 +1,7 @@
 import { Menu, X } from 'lucide-react'
-import { AnimatePresence, motion, useScroll, useMotionValueEvent } from 'framer-motion'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
+import gsap from 'gsap'
+import { useGSAP } from '@gsap/react'
 import type { Locale, Translation } from '../data/types'
 import { LanguageToggle } from './LanguageToggle'
 
@@ -12,18 +13,35 @@ type NavbarProps = {
 
 export function Navbar({ locale, t, onLocaleChange }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const [isVisible, setIsVisible] = useState(true)
-  const { scrollY } = useScroll()
+  const navRef = useRef<HTMLDivElement>(null)
+  const menuRef = useRef<HTMLDivElement>(null)
 
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    // Show navbar always unless we scroll down fast, or just keep it floating.
-    // Let's keep it always floating, but maybe add a backdrop shadow on scroll.
-    if (latest > 50) {
-      setIsVisible(true)
-    } else {
-      setIsVisible(true)
+  useGSAP(() => {
+    // Initial load animation
+    gsap.from(navRef.current, {
+      y: -100,
+      opacity: 0,
+      duration: 1,
+      ease: 'power4.out',
+      delay: 0.1
+    })
+  }, { scope: navRef })
+
+  useGSAP(() => {
+    if (isOpen) {
+      gsap.fromTo(menuRef.current, 
+        { opacity: 0, y: -20, scale: 0.95 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.4, ease: 'power3.out', display: 'block' }
+      )
+    } else if (menuRef.current) {
+      gsap.to(menuRef.current, {
+        opacity: 0, y: -20, scale: 0.95, duration: 0.3, ease: 'power3.in',
+        onComplete: () => {
+          if (menuRef.current) menuRef.current.style.display = 'none'
+        }
+      })
     }
-  })
+  }, [isOpen])
 
   const toggleMenu = () => setIsOpen(!isOpen)
 
@@ -37,14 +55,9 @@ export function Navbar({ locale, t, onLocaleChange }: NavbarProps) {
 
   return (
     <>
-      <motion.nav
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ 
-          y: isVisible || isOpen ? 0 : -100,
-          opacity: isVisible || isOpen ? 1 : 0 
-        }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="fixed left-0 right-0 top-6 z-50 mx-auto max-w-fit px-4"
+      <nav
+        ref={navRef}
+        className="fixed left-0 right-0 top-6 z-50 mx-auto max-w-fit px-4 will-change-transform"
       >
         <div className="flex items-center gap-6 rounded-full border border-vanilla-border bg-vanilla-bg/70 px-6 py-3 backdrop-blur-md shadow-subtle">
           <div className="flex shrink-0 items-center">
@@ -67,43 +80,35 @@ export function Navbar({ locale, t, onLocaleChange }: NavbarProps) {
             <LanguageToggle locale={locale} onToggle={onLocaleChange} />
           </div>
           
-          {/* Hamburger for mobile */}
           <div className="flex md:hidden">
             <button onClick={toggleMenu} type="button" className="text-vanilla-text hover:text-vanilla-muted">
               {isOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
         </div>
-      </motion.nav>
+      </nav>
 
-      {/* Mobile Menu Overlay */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -20, scale: 0.95 }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-x-4 top-24 z-40 rounded-2xl border border-vanilla-border bg-vanilla-bg/95 p-6 backdrop-blur-xl md:hidden shadow-subtle"
-          >
-            <div className="flex flex-col space-y-4">
-              {navLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={() => setIsOpen(false)}
-                  className="text-lg font-bold text-vanilla-text"
-                >
-                  {link.name}
-                </a>
-              ))}
-              <div className="pt-4 border-t border-vanilla-border">
-                <LanguageToggle locale={locale} onToggle={onLocaleChange} />
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <div
+        ref={menuRef}
+        className="fixed inset-x-4 top-24 z-40 rounded-2xl border border-vanilla-border bg-vanilla-bg/95 p-6 backdrop-blur-xl md:hidden shadow-subtle"
+        style={{ display: 'none' }}
+      >
+        <div className="flex flex-col space-y-4">
+          {navLinks.map((link) => (
+            <a
+              key={link.name}
+              href={link.href}
+              onClick={() => setIsOpen(false)}
+              className="text-lg font-bold text-vanilla-text"
+            >
+              {link.name}
+            </a>
+          ))}
+          <div className="pt-4 border-t border-vanilla-border">
+            <LanguageToggle locale={locale} onToggle={onLocaleChange} />
+          </div>
+        </div>
+      </div>
     </>
   )
 }

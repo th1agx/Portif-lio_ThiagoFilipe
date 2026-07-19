@@ -1,8 +1,13 @@
+import { useRef } from 'react'
+import gsap from 'gsap'
+import { useGSAP } from '@gsap/react'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { projects } from '../data/projects'
 import type { Locale, Project, Translation } from '../data/types'
 import { ProjectCard } from '../components/ProjectCard'
 import { SectionHeader } from '../components/SectionHeader'
-import { MotionSection } from '../components/MotionSection'
+
+gsap.registerPlugin(ScrollTrigger)
 
 type ProjectsProps = {
   locale: Locale
@@ -12,19 +17,42 @@ type ProjectsProps = {
 
 export function Projects({ locale, t, onDetails }: ProjectsProps) {
   const allProjects = projects
+  const containerRef = useRef<HTMLDivElement>(null)
+  const cardsRef = useRef<HTMLDivElement>(null)
+
+  useGSAP(() => {
+    if (!cardsRef.current) return
+
+    const cards = cardsRef.current.children
+    
+    gsap.from(cards, {
+      y: 60,
+      rotationX: 15,
+      opacity: 0,
+      filter: 'blur(10px)',
+      duration: 1.2,
+      stagger: 0.1,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: cardsRef.current,
+        start: 'top 80%',
+        toggleActions: 'play none none reverse',
+      }
+    })
+  }, { scope: containerRef })
 
   return (
-    <section id="projetos" className="px-4 py-24 sm:px-6 lg:px-8">
+    <section id="projetos" className="px-4 py-24 sm:px-6 lg:px-8" ref={containerRef}>
       <div className="mx-auto max-w-7xl">
-        <MotionSection>
+        <div className="mb-16">
           <SectionHeader eyebrow={t.projects.eyebrow} title={t.projects.title} description={t.projects.description} />
-        </MotionSection>
+        </div>
         
-        <div className="mt-16 grid gap-x-8 gap-y-16 md:grid-cols-2">
-          {allProjects.map((project, index) => (
-            <MotionSection key={project.id} delay={index * 0.1}>
+        <div className="grid gap-x-8 gap-y-16 md:grid-cols-2" ref={cardsRef} style={{ perspective: '1200px' }}>
+          {allProjects.map((project) => (
+            <div key={project.id} className="will-change-transform">
               <ProjectCard project={project} locale={locale} t={t} onDetails={onDetails} />
-            </MotionSection>
+            </div>
           ))}
         </div>
       </div>

@@ -1,4 +1,7 @@
 import { ArrowRight } from 'lucide-react'
+import { useRef } from 'react'
+import type { MouseEvent } from 'react'
+import gsap from 'gsap'
 import type { Locale, Project, Translation } from '../data/types'
 import { ProjectPreview } from './ProjectPreview'
 import { TechBadge } from './TechBadge'
@@ -11,8 +14,46 @@ type ProjectCardProps = {
 }
 
 export function ProjectCard({ project, locale, t, onDetails }: ProjectCardProps) {
+  const cardRef = useRef<HTMLElement>(null)
+
+  const handleMouseMove = (e: MouseEvent<HTMLElement>) => {
+    if (!cardRef.current) return
+    const rect = cardRef.current.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    
+    // Calculate rotation (-3 to 3 degrees for subtlety)
+    const xPct = x / rect.width - 0.5
+    const yPct = y / rect.height - 0.5
+    
+    gsap.to(cardRef.current, {
+      rotateX: -yPct * 6,
+      rotateY: xPct * 6,
+      scale: 1.01,
+      duration: 0.5,
+      ease: 'power2.out',
+      transformPerspective: 1000
+    })
+  }
+
+  const handleMouseLeave = () => {
+    if (!cardRef.current) return
+    gsap.to(cardRef.current, {
+      rotateX: 0,
+      rotateY: 0,
+      scale: 1,
+      duration: 0.8,
+      ease: 'power3.out'
+    })
+  }
+
   return (
-    <article className="group flex flex-col gap-6">
+    <article 
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className="group flex flex-col gap-6 will-change-transform"
+    >
       <div 
         className="relative aspect-[16/10] overflow-hidden bg-white/50 cursor-pointer"
         onClick={() => onDetails(project)}
