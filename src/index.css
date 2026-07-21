@@ -11,7 +11,7 @@
 }
 
 body {
-  background-color: #F6F4EF;
+  background-color: #F3EFE6;
   color: #1A1A1A;
   font-family: 'Satoshi', sans-serif;
   overflow-x: hidden;
@@ -21,7 +21,7 @@ body {
 
 ::selection {
   background-color: #1A1A1A;
-  color: #F6F4EF;
+  color: #F3EFE6;
 }
 
 /* ──────────────────────────────────────────

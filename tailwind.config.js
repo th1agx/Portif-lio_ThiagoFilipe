@@ -5,7 +5,7 @@ export default {
     extend: {
       colors: {
         vanilla: {
-          bg: '#F6F4EF', // Warm paper off-white background
+          bg: '#F3EFE6', // Richer warm paper creme background
           text: '#1A1A1A', // Rich Charcoal text
           muted: '#666666', // Softer grey for secondary text
           border: 'rgba(26, 26, 26, 0.08)', // Very thin subtle lines

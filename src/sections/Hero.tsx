@@ -7,19 +7,9 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
-export function Hero({ t, isLoaded }: { t: Translation; isLoaded: boolean }) {
+export function Hero({ t }: { t: Translation; isLoaded?: boolean }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
-
-  // Cinematic Entrance Animation - Subtle fade-in when revealed
-  useGSAP(() => {
-    if (!isLoaded || !containerRef.current || !contentRef.current) return
-
-    gsap.fromTo(contentRef.current.children, 
-      { opacity: 0.8, y: 15 },
-      { opacity: 1, y: 0, duration: 1, stagger: 0.05, ease: 'power2.out' }
-    )
-  }, [isLoaded])
 
   // Camera Fly-through (Scroll Scrub with subtle depth, no heavy blur)
   useGSAP(() => {
