@@ -2,8 +2,6 @@ import { X } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useRef } from 'react'
 import type { Locale, Project, Translation } from '../data/types'
-import { Button } from './Button'
-import { TechBadge } from './TechBadge'
 
 type ProjectDrawerProps = {
   project: Project | null
