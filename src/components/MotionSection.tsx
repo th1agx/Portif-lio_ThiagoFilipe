@@ -21,10 +21,10 @@ export function MotionSection({
     if (!containerRef.current) return
 
     gsap.from(containerRef.current, {
-      y: 40,
+      y: 30,
       opacity: 0,
-      filter: 'blur(10px)',
-      duration: 1.2,
+      filter: 'blur(2px)',
+      duration: 1.0,
       delay: delay,
       ease: 'power3.out',
       scrollTrigger: {

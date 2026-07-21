@@ -17,14 +17,14 @@ export function About({ t }: { t: Translation }) {
 
     // Camera flies INTO the About section (comes from z: -1500 to z: 0)
     gsap.from(contentRef.current, {
-      z: -1500,
+      z: -300,
       opacity: 0,
-      filter: 'blur(30px)',
+      filter: 'blur(2px)',
       ease: 'none',
       scrollTrigger: {
         trigger: containerRef.current,
-        start: 'top bottom', // Start animating as soon as it enters viewport
-        end: 'top 30%',     // Finished moving into place when it's near the top
+        start: 'top bottom',
+        end: 'top 30%',
         scrub: 1.5,
       }
     })

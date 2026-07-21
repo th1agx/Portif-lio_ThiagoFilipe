@@ -35,10 +35,10 @@ export function SectionHeader({ eyebrow, title, description }: SectionHeaderProp
     }
 
     tl.from('.header-title-word', {
-      y: 60,
+      y: 40,
       opacity: 0,
-      filter: 'blur(12px)',
-      stagger: 0.1,
+      filter: 'blur(2px)',
+      stagger: 0.08,
       ease: 'none'
     }, 0)
 

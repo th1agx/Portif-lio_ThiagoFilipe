@@ -49,8 +49,6 @@ function App() {
 
   // Global Scroll & Animation Context Architecture
   useEffect(() => {
-    if (isLoading) return 
-
     // 1. Lenis Smooth Scroll
     const lenis = new Lenis({
       duration: 1.5,
@@ -62,6 +60,12 @@ function App() {
       touchMultiplier: 2,
     })
 
+    if (isLoading) {
+      lenis.stop()
+    } else {
+      lenis.start()
+    }
+
     // 2. GSAP Sync
     lenis.on('scroll', ScrollTrigger.update)
 
@@ -71,9 +75,9 @@ function App() {
     
     gsap.ticker.lagSmoothing(0)
 
-    // 3. Master Timeline Setup (Empty for now, populated in Stage 3-5)
+    // 3. Master Timeline Setup
     const masterCtx = gsap.context(() => {
-      // Global timelines and parallax controllers will live here
+      // Global timelines and parallax controllers
     }, mainWrapperRef)
 
     return () => {
@@ -93,20 +97,20 @@ function App() {
 
       {/* Cinematic Loader */}
       {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
+      
       {/* Interactive Cursor Layer */}
       <CursorTrail />
       
-      {/* Fixed Navbar on top of everything */}
+      {/* Fixed Navbar rendered on top from frame 1 */}
       <div className="fixed top-0 left-0 right-0 z-50 pointer-events-auto">
-        {!isLoading && <Navbar locale={locale} t={t} onLocaleChange={setLocale} />}
+        <Navbar locale={locale} t={t} onLocaleChange={setLocale} />
       </div>
 
       {/* DOM Layer (HTML Layout) */}
-      {/* Perspective wrapper for Stage 5 Z-axis animations */}
       <div className="relative z-10 w-full" style={{ perspective: '2000px', transformStyle: 'preserve-3d' }}>
         
         <main className="flex flex-col gap-0 w-full mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" style={{ transformStyle: 'preserve-3d' }}>
-          {/* Sections retain standard HTML flow, motion will be applied inside */}
+          {/* Hero section */}
           <Hero t={t} isLoaded={!isLoading} />
           <About t={t} />
           <Skills t={t} />
@@ -115,7 +119,7 @@ function App() {
           <Certifications t={t} />
         </main>
         
-        <div className="w-full relative z-20 bg-black mt-24">
+        <div className="w-full relative z-20 bg-[#111111] text-[#F6F4EF] mt-24">
           <Contact t={t} />
         </div>
       </div>

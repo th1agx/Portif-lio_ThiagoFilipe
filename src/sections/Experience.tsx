@@ -17,11 +17,11 @@ export function Experience({ t }: { t: Translation }) {
     const items = listRef.current.children
     
     gsap.from(items, {
-      y: 80,
+      y: 50,
       opacity: 0,
-      scale: 0.95,
-      filter: 'blur(10px)',
-      stagger: 0.2,
+      scale: 0.98,
+      filter: 'blur(0px)',
+      stagger: 0.15,
       ease: 'none',
       scrollTrigger: {
         trigger: listRef.current,

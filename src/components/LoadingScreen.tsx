@@ -69,24 +69,24 @@ export function LoadingScreen({ onComplete }: LoadingScreenProps) {
       }
     })
 
-    // 6. Dissolve elements out with a slight camera push forward (scale up)
+    // 6. Dissolve elements out smoothly
     tl.to([nameRef.current, roleRef.current, progressContainerRef.current, gridRef.current], {
       opacity: 0,
-      scale: 1.1,
-      filter: 'blur(15px)',
-      duration: 1.5,
+      scale: 1.04,
+      filter: 'blur(4px)',
+      duration: 0.9,
       ease: 'power3.inOut',
-      stagger: 0.1
+      stagger: 0.05
     })
 
-    // 7. Curtain rises (background fades out into transparent, revealing the scene)
+    // 7. Curtain rises cleanly (fades out to reveal pre-mounted Hero & Navbar)
     tl.to(overlayRef.current, {
       opacity: 0,
-      duration: 1.5,
+      duration: 0.9,
       ease: 'power2.inOut',
-    }, '-=0.8')
+    }, '-=0.6')
     
-    // Unmount
+    // Unmount container
     tl.set(containerRef.current, { display: 'none' })
 
   }, [onComplete])

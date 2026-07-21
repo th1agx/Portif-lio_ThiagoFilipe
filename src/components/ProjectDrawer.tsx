@@ -44,7 +44,7 @@ export function ProjectDrawer({ project, locale, t, onClose }: ProjectDrawerProp
           <motion.button
             type="button"
             aria-label={t.common.close}
-            className="absolute inset-0 bg-black/65 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/75 backdrop-blur-md"
             onClick={onClose}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -54,7 +54,7 @@ export function ProjectDrawer({ project, locale, t, onClose }: ProjectDrawerProp
             role="dialog"
             aria-modal="true"
             aria-labelledby="project-drawer-title"
-            className="absolute right-0 top-0 h-full w-full max-w-xl overflow-y-auto border-l border-white/10 bg-studio-surface p-6 shadow-2xl"
+            className="absolute right-0 top-0 h-full w-full max-w-xl overflow-y-auto border-l border-vanilla-border bg-[#F6F4EF]/95 backdrop-blur-2xl p-8 shadow-2xl text-vanilla-text"
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
@@ -70,8 +70,8 @@ export function ProjectDrawer({ project, locale, t, onClose }: ProjectDrawerProp
               className="mb-6 flex items-start justify-between gap-4"
             >
               <div>
-                <p className="font-mono text-xs font-bold uppercase text-studio-candy">{project.status[locale]}</p>
-                <h2 id="project-drawer-title" className="mt-2 font-display text-3xl font-extrabold text-studio-text">
+                <p className="font-mono text-xs font-bold uppercase tracking-wider text-vanilla-muted">{project.status[locale]}</p>
+                <h2 id="project-drawer-title" className="mt-2 font-display text-3xl font-extrabold tracking-tight text-vanilla-text">
                   {project.title[locale]}
                 </h2>
               </div>
@@ -79,21 +79,21 @@ export function ProjectDrawer({ project, locale, t, onClose }: ProjectDrawerProp
                 ref={closeButtonRef}
                 type="button"
                 onClick={onClose}
-                className="grid h-10 w-10 shrink-0 place-items-center rounded-md border border-white/10 bg-white/[0.05] text-studio-text"
+                className="grid h-10 w-10 shrink-0 place-items-center rounded-lg border border-vanilla-border bg-white/50 text-vanilla-text transition-colors hover:bg-vanilla-text hover:text-vanilla-bg"
                 aria-label={t.common.close}
               >
                 <X size={18} />
               </button>
             </motion.div>
 
-            <motion.p variants={{ hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0 } }} className="text-base leading-7 text-studio-muted">
+            <motion.p variants={{ hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0 } }} className="text-base leading-relaxed text-vanilla-text/90">
               {project.description[locale]}
             </motion.p>
             <motion.div
               variants={{ hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0 } }}
-              className="mt-6 rounded-lg border border-white/10 bg-white/[0.04] p-4"
+              className="mt-6 rounded-xl border border-vanilla-border bg-white/60 p-5 shadow-subtle"
             >
-              <p className="font-mono text-xs font-bold uppercase text-studio-muted">{t.common.technologies}</p>
+              <p className="font-mono text-xs font-bold uppercase tracking-wider text-vanilla-muted">{t.common.technologies}</p>
               <div className="mt-3 flex flex-wrap gap-2">
                 {project.technologies.map((tech) => (
                   <TechBadge key={tech} label={tech} />
@@ -103,7 +103,7 @@ export function ProjectDrawer({ project, locale, t, onClose }: ProjectDrawerProp
 
             <motion.div variants={{ hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0 } }} className="mt-6 space-y-4">
               {project.details[locale].map((detail) => (
-                <p key={detail} className="leading-7 text-studio-muted">
+                <p key={detail} className="text-base leading-relaxed text-vanilla-text/85">
                   {detail}
                 </p>
               ))}

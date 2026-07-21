@@ -11,41 +11,31 @@ export function Hero({ t, isLoaded }: { t: Translation; isLoaded: boolean }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
 
-  // Cinematic Entrance Animation
+  // Cinematic Entrance Animation - Subtle fade-in when revealed
   useGSAP(() => {
     if (!isLoaded || !containerRef.current || !contentRef.current) return
 
-    const tl = gsap.timeline({ defaults: { ease: 'power4.out' } })
-
-    // Give it a small delay so the loading screen finishes its curtain rising
-    tl.from(contentRef.current.children, {
-      z: -500, // Starts deep in the background
-      opacity: 0,
-      filter: 'blur(20px)',
-      duration: 2.5,
-      stagger: 0.1,
-      ease: 'expo.out',
-      delay: 0.5
-    })
+    gsap.fromTo(contentRef.current.children, 
+      { opacity: 0.8, y: 15 },
+      { opacity: 1, y: 0, duration: 1, stagger: 0.05, ease: 'power2.out' }
+    )
   }, [isLoaded])
 
-  // Camera Fly-through (Scroll Scrub)
+  // Camera Fly-through (Scroll Scrub with subtle depth, no heavy blur)
   useGSAP(() => {
     if (!containerRef.current || !contentRef.current) return
 
-    // As user scrolls down, the Hero section is pushed back slowly and gracefully into the Z-axis
-    // It coexists with the next section coming up
     gsap.to(contentRef.current, {
-      z: -250, // Pushed gently into the background
-      yPercent: -15, // Slight parallax upwards
-      opacity: 0,
-      filter: 'blur(15px)',
+      z: -120, // Gentle push into depth
+      yPercent: -10, // Subtle parallax
+      opacity: 0.1, // Fade out smoothly without blurring to illegibility
+      filter: 'blur(2px)', // Minimal art-direction blur
       ease: 'none',
       scrollTrigger: {
         trigger: containerRef.current,
         start: 'top top',
         end: 'bottom top',
-        scrub: 1.2, // Smooth camera tracking
+        scrub: 1.2,
       }
     })
   }, { scope: containerRef })

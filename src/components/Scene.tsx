@@ -58,12 +58,11 @@ function Plexus() {
 
   return (
     <Icosahedron ref={meshRef} args={[2, 16]} position={[0, 0, -2]}>
-      {/* Changed color to a dark tone to contrast with the creme background */}
       <meshBasicMaterial 
         color="#000000" 
         wireframe={true} 
         transparent={true} 
-        opacity={0.03} // Extremely subtle, almost like a pencil sketch
+        opacity={0.025} // Ultra subtle background art direction
       />
     </Icosahedron>
   )

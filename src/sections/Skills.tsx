@@ -18,9 +18,9 @@ export function Skills({ t }: { t: Translation }) {
     const items = listRef.current.children
     
     gsap.from(items, {
-      y: 60,
+      y: 40,
       opacity: 0,
-      filter: 'blur(10px)',
+      filter: 'blur(0px)',
       stagger: 0.1,
       ease: 'none',
       scrollTrigger: {

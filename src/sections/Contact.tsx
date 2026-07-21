@@ -30,9 +30,9 @@ export function Contact({ t }: { t: Translation }) {
 
     if (leftColRef.current) {
       gsap.from(leftColRef.current.children, {
-        y: 60,
+        y: 40,
         opacity: 0,
-        filter: 'blur(10px)',
+        filter: 'blur(0px)',
         stagger: 0.1,
         ease: 'none',
         scrollTrigger: {
@@ -46,9 +46,9 @@ export function Contact({ t }: { t: Translation }) {
 
     if (rightColRef.current) {
       gsap.from(rightColRef.current.children, {
-        y: 40,
+        y: 30,
         opacity: 0,
-        filter: 'blur(5px)',
+        filter: 'blur(0px)',
         stagger: 0.1,
         ease: 'none',
         scrollTrigger: {
@@ -63,39 +63,39 @@ export function Contact({ t }: { t: Translation }) {
   }, { scope: containerRef })
 
   return (
-    <section id="contato" className="px-4 py-32 sm:px-6 lg:px-8 mt-24 will-change-transform" ref={containerRef}>
+    <section id="contato" className="px-4 py-32 sm:px-6 lg:px-8 mt-24 will-change-transform text-[#F6F4EF]" ref={containerRef}>
       <div className="mx-auto max-w-7xl flex flex-col md:flex-row gap-16 justify-between items-start">
         <div className="max-w-2xl" ref={leftColRef}>
-          <p className="font-mono text-xs font-bold uppercase tracking-widest2 text-vanilla-muted mb-6 will-change-transform">{t.contact.eyebrow}</p>
-          <h2 className="font-display text-5xl font-black tracking-tightest sm:text-7xl mb-8 will-change-transform text-vanilla-text">
+          <p className="font-mono text-xs font-bold uppercase tracking-widest2 text-[#F6F4EF]/60 mb-6 will-change-transform">{t.contact.eyebrow}</p>
+          <h2 className="font-display text-5xl font-black tracking-tightest sm:text-7xl mb-8 will-change-transform text-[#F6F4EF]">
             {t.contact.title}
           </h2>
-          <p className="text-xl text-vanilla-muted max-w-xl will-change-transform">
+          <p className="text-xl text-[#F6F4EF]/80 max-w-xl will-change-transform">
             {t.contact.description}
           </p>
         </div>
 
         <div className="flex flex-col gap-4 w-full md:w-auto mt-8 md:mt-0" ref={rightColRef}>
-          <a href={links.email} className="group flex items-center justify-between border-b border-vanilla-border pb-4 text-2xl font-bold hover:text-vanilla-muted transition-colors will-change-transform text-vanilla-text">
+          <a href={links.email} className="group flex items-center justify-between border-b border-white/15 pb-4 text-2xl font-bold text-[#F6F4EF] hover:text-white transition-colors will-change-transform">
             <span>{t.contact.emailLabel}</span>
             <Mail size={24} className="opacity-0 -translate-x-4 transition-all group-hover:opacity-100 group-hover:translate-x-0" />
           </a>
-          <a href={links.linkedin} target="_blank" rel="noreferrer" className="group flex items-center justify-between border-b border-vanilla-border pb-4 text-2xl font-bold hover:text-vanilla-muted transition-colors will-change-transform text-vanilla-text">
+          <a href={links.linkedin} target="_blank" rel="noreferrer" className="group flex items-center justify-between border-b border-white/15 pb-4 text-2xl font-bold text-[#F6F4EF] hover:text-white transition-colors will-change-transform">
             <span>{t.contact.linkedinLabel}</span>
             <ContactRound size={24} className="opacity-0 -translate-x-4 transition-all group-hover:opacity-100 group-hover:translate-x-0" />
           </a>
-          <a href={links.github} target="_blank" rel="noreferrer" className="group flex items-center justify-between border-b border-vanilla-border pb-4 text-2xl font-bold hover:text-vanilla-muted transition-colors will-change-transform text-vanilla-text">
+          <a href={links.github} target="_blank" rel="noreferrer" className="group flex items-center justify-between border-b border-white/15 pb-4 text-2xl font-bold text-[#F6F4EF] hover:text-white transition-colors will-change-transform">
             <span>{t.contact.githubLabel}</span>
             <Code2 size={24} className="opacity-0 -translate-x-4 transition-all group-hover:opacity-100 group-hover:translate-x-0" />
           </a>
-          <a href={links.resume} target="_blank" rel="noreferrer" className="group flex items-center justify-between border-b border-vanilla-border pb-4 text-2xl font-bold hover:text-vanilla-muted transition-colors will-change-transform text-vanilla-text">
+          <a href={links.resume} target="_blank" rel="noreferrer" className="group flex items-center justify-between border-b border-white/15 pb-4 text-2xl font-bold text-[#F6F4EF] hover:text-white transition-colors will-change-transform">
             <span>{t.common.downloadResume}</span>
             <FileDown size={24} className="opacity-0 -translate-x-4 transition-all group-hover:opacity-100 group-hover:translate-x-0" />
           </a>
         </div>
       </div>
       
-      <div className="mx-auto max-w-7xl mt-32 border-t border-vanilla-border pt-8 flex justify-between items-center text-sm font-medium text-vanilla-muted">
+      <div className="mx-auto max-w-7xl mt-32 border-t border-white/15 pt-8 flex justify-between items-center text-sm font-medium text-[#F6F4EF]/50">
         <p>© {new Date().getFullYear()} Thiago Filipe</p>
         <p>Creative Developer</p>
       </div>

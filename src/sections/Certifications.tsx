@@ -17,10 +17,10 @@ export function Certifications({ t }: { t: Translation }) {
     const items = listRef.current.children
     
     gsap.from(items, {
-      y: 40,
+      y: 30,
       opacity: 0,
-      filter: 'blur(8px)',
-      duration: 1.2,
+      filter: 'blur(0px)',
+      duration: 1.0,
       stagger: 0.1,
       ease: 'power3.out',
       scrollTrigger: {
