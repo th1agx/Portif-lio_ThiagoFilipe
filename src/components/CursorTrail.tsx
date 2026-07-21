@@ -14,13 +14,20 @@ export function CursorTrail() {
     canvas.width = width
     canvas.height = height
 
-    let points: { x: number; y: number; age: number }[] = []
-    let mouse = { x: -100, y: -100 }
+    let mouseX = -100
+    let mouseY = -100
+    let ballX = -100
+    let ballY = -100
+    let hasMoved = false
 
     const handleMouseMove = (e: MouseEvent) => {
-      mouse.x = e.clientX
-      mouse.y = e.clientY
-      points.push({ x: mouse.x, y: mouse.y, age: 0 })
+      mouseX = e.clientX
+      mouseY = e.clientY
+      if (!hasMoved) {
+        ballX = mouseX
+        ballY = mouseY
+        hasMoved = true
+      }
     }
 
     window.addEventListener('mousemove', handleMouseMove)
@@ -37,36 +44,17 @@ export function CursorTrail() {
     let animationFrame: number
 
     const render = () => {
-      // Fade out effect by drawing a semi-transparent clear layer
       ctx.clearRect(0, 0, width, height)
 
-      if (points.length > 0) {
+      if (hasMoved) {
+        // Smooth lerp following physics (trailing close to cursor without sticking)
+        ballX += (mouseX - ballX) * 0.14
+        ballY += (mouseY - ballY) * 0.14
+
         ctx.beginPath()
-        ctx.lineCap = 'round'
-        ctx.lineJoin = 'round'
-        
-        for (let i = 0; i < points.length; i++) {
-          const p = points[i]
-          p.age += 1
-
-          if (i === 0) {
-            ctx.moveTo(p.x, p.y)
-          } else {
-            // Smooth curve
-            const xc = (points[i - 1].x + p.x) / 2
-            const yc = (points[i - 1].y + p.y) / 2
-            ctx.quadraticCurveTo(points[i - 1].x, points[i - 1].y, xc, yc)
-          }
-        }
-        
-        // The stroke color is deep black, we use varying thickness or just solid
-        ctx.strokeStyle = '#e6e3dc' // Slightly darker than background for a subtle paintbrush effect behind content
-        ctx.lineWidth = 60 // Much thicker
-
-        ctx.stroke()
-        
-        // Filter out old points
-        points = points.filter(p => p.age < 20)
+        ctx.arc(ballX, ballY, 22, 0, Math.PI * 2)
+        ctx.fillStyle = 'rgba(26, 26, 26, 0.16)' // Visible organic paper ink ball
+        ctx.fill()
       }
 
       animationFrame = requestAnimationFrame(render)
@@ -85,7 +73,7 @@ export function CursorTrail() {
     <canvas
       id="cursor-canvas"
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none z-[5] mix-blend-multiply opacity-50"
+      className="fixed inset-0 pointer-events-none z-[2] mix-blend-multiply"
     />
   )
 }

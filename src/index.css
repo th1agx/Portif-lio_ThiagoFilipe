@@ -77,6 +77,6 @@ body {
   width: 100vw;
   height: 100vh;
   pointer-events: none;
-  z-index: 50; /* Above most things, but below critical interactive elements if needed */
-  mix-blend-mode: multiply; /* Looks like ink on paper */
+  z-index: 2; /* Below main z-10 text content layer */
+  mix-blend-mode: multiply; /* Looks like organic ink on paper */
 }
