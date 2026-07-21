@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { mouseStore } from '../lib/mouseStore'
 
 export function CursorTrail() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -14,19 +15,19 @@ export function CursorTrail() {
     canvas.width = width
     canvas.height = height
 
-    let mouseX = -100
-    let mouseY = -100
-    let ballX = -100
-    let ballY = -100
-    let hasMoved = false
+    // Cursor node position with lerp (slightly behind mouse)
+    let nodeX = -200
+    let nodeY = -200
 
     const handleMouseMove = (e: MouseEvent) => {
-      mouseX = e.clientX
-      mouseY = e.clientY
-      if (!hasMoved) {
-        ballX = mouseX
-        ballY = mouseY
-        hasMoved = true
+      mouseStore.x = e.clientX
+      mouseStore.y = e.clientY
+      mouseStore.ndcX = (e.clientX / window.innerWidth) * 2 - 1
+      mouseStore.ndcY = -((e.clientY / window.innerHeight) * 2 - 1)
+      if (!mouseStore.hasMoved) {
+        nodeX = e.clientX
+        nodeY = e.clientY
+        mouseStore.hasMoved = true
       }
     }
 
@@ -46,15 +47,47 @@ export function CursorTrail() {
     const render = () => {
       ctx.clearRect(0, 0, width, height)
 
-      if (hasMoved) {
-        // Smooth lerp following physics (trailing close to cursor without sticking)
-        ballX += (mouseX - ballX) * 0.14
-        ballY += (mouseY - ballY) * 0.14
+      if (mouseStore.hasMoved) {
+        // Smooth lag — cursor node trails the mouse organically
+        nodeX += (mouseStore.x - nodeX) * 0.12
+        nodeY += (mouseStore.y - nodeY) * 0.12
 
+        // Draw connection lines to a few nearby "ghost" anchor positions
+        // These simulate graph edges connecting the cursor node to invisible anchors
+        const anchors = [
+          { x: nodeX - 80, y: nodeY - 40 },
+          { x: nodeX + 90, y: nodeY - 60 },
+          { x: nodeX - 50, y: nodeY + 70 },
+          { x: nodeX + 60, y: nodeY + 50 },
+        ]
+
+        for (const anchor of anchors) {
+          ctx.beginPath()
+          ctx.moveTo(nodeX, nodeY)
+          ctx.lineTo(anchor.x, anchor.y)
+          ctx.strokeStyle = 'rgba(26, 26, 26, 0.06)'
+          ctx.lineWidth = 0.8
+          ctx.stroke()
+
+          // Ghost anchor node
+          ctx.beginPath()
+          ctx.arc(anchor.x, anchor.y, 1.5, 0, Math.PI * 2)
+          ctx.fillStyle = 'rgba(26, 26, 26, 0.10)'
+          ctx.fill()
+        }
+
+        // Main cursor node — small crisp circle like a graph node
         ctx.beginPath()
-        ctx.arc(ballX, ballY, 22, 0, Math.PI * 2)
-        ctx.fillStyle = 'rgba(26, 26, 26, 0.16)' // Visible organic paper ink ball
+        ctx.arc(nodeX, nodeY, 4, 0, Math.PI * 2)
+        ctx.fillStyle = 'rgba(26, 26, 26, 0.28)'
         ctx.fill()
+
+        // Outer glow ring (very faint)
+        ctx.beginPath()
+        ctx.arc(nodeX, nodeY, 10, 0, Math.PI * 2)
+        ctx.strokeStyle = 'rgba(26, 26, 26, 0.07)'
+        ctx.lineWidth = 1
+        ctx.stroke()
       }
 
       animationFrame = requestAnimationFrame(render)
